@@ -31,3 +31,7 @@ Makefile.in
 # http://www.gnu.org/software/texinfo
 
 /texinfo.tex
+
+*.swp
+.vscode
+node_modules/*
