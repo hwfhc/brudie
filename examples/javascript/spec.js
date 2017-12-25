@@ -1,13 +1,15 @@
-const ENV = require('../../src/env');
+const generator = require('../../src/index');
 
-const rule = require('../../src/parser/rule');
-const tokenStream = require('../../src/lexer/tokenStream');
+const ENV = generator.ENV;
 
-const Ident = require('../../src/lexer/ident');
-const Punc = require('../../src/lexer/punc');
-const Num = require('../../src/lexer/num');
-const Sep = require('../../src/lexer/sep');
-const Html = require('../../src/lexer/html');
+const rule = generator.rule;
+const tokenStream = generator.tokenStream;
+
+const Ident = generator.Ident;
+const Punc = generator.Punc;
+const Num = generator.Num;
+const Sep = generator.Sep;
+const Html = generator.Html;
 
 var ident = new Ident();
 var num = new Num();
