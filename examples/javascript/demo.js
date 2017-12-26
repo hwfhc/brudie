@@ -1,12 +1,13 @@
-const generator = require('../../src/index');
+/*const generator = require('../../src/index');
 
 const ENV = generator.ENV;
 
 const rule = generator.rule;
 const tokenStream = generator.tokenStream;
 const ModeGen = generator.ModeGen;
+*/
 
-const TokGen = generator.TokGen;
+const TokGen = require('../../src/index.js').TokGen;
 
 const ident = new TokGen({
     MATCH: /^[a-zA-Z_]+/,
@@ -18,11 +19,13 @@ const sep = new TokGen({
     MATCH: /^[^(`|{{|}})]+/,
     isStrictEqual: true
 });
-const quo = new TokGen({ 
+const quo = new TokGen({
     MATCH: /^[^(`|{{|}})]+/,
-    isStrictEqual: true
-}).inherit(sep);
+    isStrictEqual: true,
+    inherit: sep
+});
 
+/*
 const mode = new ModeGen({
     switch: function (char) {
         if (char === '{{')
@@ -135,3 +138,5 @@ module.exports = async function (code,callback){
 function isError(obj){
     return obj.__proto__ === Error.prototype;
 }
+
+*/
