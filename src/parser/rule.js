@@ -1,14 +1,7 @@
-const Ident = require('../lexer/ident');
-const Punc = require('../lexer/punc');
-const Num = require('../lexer/num');
-const Quo = require('../lexer/quo');
-const Sep = require('../lexer/sep');
-
 const AST = require('./ast');
 const Repeat = require('./repeat');
 const Maybe = require('./maybe');
 const Or = require('./or');
-
 
 class Rule{
     constructor(tag){
@@ -18,7 +11,7 @@ class Rule{
         this.list = [];
     }
 
-    ast(item){
+    add(item){
         this.list.push(item);
 
         return this;

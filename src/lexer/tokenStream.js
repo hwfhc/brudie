@@ -1,9 +1,8 @@
-const Mode = require('./mode');
 
 class TokenStream{
-    constructor(code){
+    constructor(code,Mode){
         this.index = -1;
-        this.stream = scan(code);
+        this.stream = scan(code,Mode);
 
         if(isError(this.stream))
             return this.stream;
@@ -29,7 +28,7 @@ class TokenStream{
     }
 }
 
-function scan(str){
+function scan(str,Mode){
     var stream = [];
     var mode = new Mode();
 

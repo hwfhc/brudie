@@ -1,15 +1,18 @@
 module.exports = generator;
 
 function generator(config) {
+    // read properties of config
     var MATCH = config.MATCH;
+    var type = config.type;
     var eval = config.eval;
     var isStrictEqual = config.isStrictEqual;
+    var inherit = config.inherit;
 
     // create constructor
     var tok = function (value) {
         var obj = {};
 
-        obj.MATCH = MATCH;
+        obj.type = type;
         obj.value = value;
 
         return obj;
@@ -18,7 +21,8 @@ function generator(config) {
     // add properties of constructor
     tok.MATCH = MATCH;
 
-    var proto = { eval, match };
+    var proto = { eval, match, MATCH };
+    proto.__proto__ = inherit;
     tok.prototype = proto;
 
     return tok;

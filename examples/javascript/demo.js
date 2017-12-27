@@ -7,49 +7,75 @@ const tokenStream = generator.tokenStream;
 const ModeGen = generator.ModeGen;
 */
 
-const TokGen = require('../../src/index.js').TokGen;
+const generator = require('../../src/index');
+const TokGen = generator.TokGen;
+const ModeGen = generator.ModeGen;
+const tokenStream = generator.tokenStream;
+const rule = generator.rule;
 
+const sep = new TokGen({
+    MATCH: /^(\(|\)|,|\.)/,
+    type: 'sep',
+    isStrictEqual: true
+});
 const ident = new TokGen({
     MATCH: /^[a-zA-Z_]+/,
+    type: 'ident',
     eval: function(){
 
     }
 });
-const sep = new TokGen({ 
+const html = new TokGen({ 
     MATCH: /^[^(`|{{|}})]+/,
+    type: 'html',
     isStrictEqual: true
 });
-const quo = new TokGen({
-    MATCH: /^[^(`|{{|}})]+/,
+const code = new TokGen({ 
+    MATCH: /^({{|}})/,
+    type: 'code',
+    isStrictEqual: true
+});
+const quo = new TokGen({ 
+    MATCH: /^(`)/,
+    type: 'quo',
+    isStrictEqual: true
+});
+const num = new TokGen({ 
+    MATCH: /^[0-9]+/,
+    type: 'num',
+    isStrictEqual: true
+});
+const punc = new TokGen({
+    MATCH: /^(\(|\)|,|\.)/,
+    type: 'punc',
     isStrictEqual: true,
     inherit: sep
 });
 
-/*
+
 const mode = new ModeGen({
     switch: function (char) {
         if (char === '{{')
-            this.list = outStr;
+            this.list = this.rule[2];
 
 
         if (char === '}}')
-            this.list = outCode;
+            this.list = this.rule[0];
 
         if (char === '`') {
-            if (this.list === inStr)
-                this.list = outStr;
+            if (this.list === this.rule[1])
+                this.list = this.rule[2];
             else
-                this.list = inStr;
+                this.list = this.rule[1];
         }
 
     },
     rule: [
-        [html, code],
-        [html, quo],
-        [num, ident, quo, punc, code]
+        [html, code],//outCode
+        [html, quo],//inStr
+        [num, ident, quo, punc, code]//outStr
     ]
 });
-
 
 // dot : ident {'.' ident} 
 var dot = rule('dot').add(ident).repeat([sep('.'), ident]).setEval(
@@ -78,7 +104,7 @@ var arg = rule('arg').or([str, dot, num]).setEval(
 );
 
 // call : ident '(' arg {',' arg} ')'
-var call = rule('call').add(ident).add(sep('(')).ast(arg).repeat([sep(','),arg]).add(sep(')')).setEval(
+var call = rule('call').add(ident).add(sep('(')).add(arg).repeat([sep(','),arg]).add(sep(')')).setEval(
     function (){
         var func = this.getFirstChild().eval();
         var args = [];
@@ -116,8 +142,23 @@ var stmt = rule('stmt').maybe([html]).add(sep('{{')).or([call, dot]).add(sep('}}
     }
 );
 
+(function () {
+    var code = 'adas asdf{{test(123,test,`ad`)}}ad';
+    var ts = new tokenStream(code, mode);
 
-module.exports = async function (code,callback){
+    if (isError(ts)) {
+        callback(ts);
+        return;
+    }
+
+    /*var ast = stmt.match(ts);
+
+    if (isError(ast)) {
+        callback(ast);
+        return;
+    }*/
+})();
+/*module.exports = async function (code,callback){
     var ts = new tokenStream(code,mode);
 
     if(isError(ts)){
@@ -133,10 +174,8 @@ module.exports = async function (code,callback){
     }
 
     callback(null,await ast.eval());
-}
+}*/
 
 function isError(obj){
     return obj.__proto__ === Error.prototype;
 }
-
-*/
