@@ -12,6 +12,7 @@ const TokGen = generator.TokGen;
 const ModeGen = generator.ModeGen;
 const tokenStream = generator.tokenStream;
 const rule = generator.rule;
+const ENV = generator.ENV;
 
 const sep = new TokGen({
     MATCH: /^(\(|\)|,|\.)/,
@@ -21,33 +22,44 @@ const sep = new TokGen({
 const ident = new TokGen({
     MATCH: /^[a-zA-Z_]+/,
     type: 'ident',
-    eval: function(){
-
+    eval: function () {
+        return this.value;
     }
 });
-const html = new TokGen({ 
+const html = new TokGen({
     MATCH: /^[^(`|{{|}})]+/,
     type: 'html',
-    isStrictEqual: true
+    eval: function () {
+        return this.value;
+    }
 });
-const code = new TokGen({ 
-    MATCH: /^({{|}})/,
-    type: 'code',
-    isStrictEqual: true
-});
-const quo = new TokGen({ 
-    MATCH: /^(`)/,
-    type: 'quo',
-    isStrictEqual: true
-});
-const num = new TokGen({ 
+const num = new TokGen({
     MATCH: /^[0-9]+/,
     type: 'num',
-    isStrictEqual: true
+    inherit: sep,
+    eval: function () {
+        return this.value;
+    }
+});
+
+const code = new TokGen({
+    MATCH: /^({{|}})/,
+    type: 'code',
+    hidden: true,
+    isStrictEqual: true,
+    inherit: sep
+});
+const quo = new TokGen({
+    MATCH: /^(`)/,
+    type: 'quo',
+    hidden: true,
+    isStrictEqual: true,
+    inherit: sep
 });
 const punc = new TokGen({
     MATCH: /^(\(|\)|,|\.)/,
     type: 'punc',
+    hidden: true,
     isStrictEqual: true,
     inherit: sep
 });
@@ -142,8 +154,8 @@ var stmt = rule('stmt').maybe([html]).add(sep('{{')).or([call, dot]).add(sep('}}
     }
 );
 
-(function () {
-    var code = 'adas asdf{{test(123,test,`ad`)}}ad';
+async function test(code,callback) {
+    //var code = 'adas asdf{{test(123,test,`ad`)}}ad';
     var ts = new tokenStream(code, mode);
 
     if (isError(ts)) {
@@ -151,13 +163,24 @@ var stmt = rule('stmt').maybe([html]).add(sep('{{')).or([call, dot]).add(sep('}}
         return;
     }
 
-    /*var ast = stmt.match(ts);
+    var ast = stmt.match(ts);
 
     if (isError(ast)) {
         callback(ast);
         return;
-    }*/
-})();
+    }
+
+    callback(null,await ast.eval());
+};
+
+test('my name is {{bool.a}} 165', (err,data) => {
+    if(err)
+        console.log(err);
+    else
+        console.log(data);
+});
+
+
 /*module.exports = async function (code,callback){
     var ts = new tokenStream(code,mode);
 

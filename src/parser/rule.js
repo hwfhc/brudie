@@ -82,15 +82,15 @@ function isError(obj){
 }
 
 function isSep(tok){
-    var tem = tok.__proto__;
+    return tok.hidden === true;
 
-    while(tem){
+    /*while(tem){
         if(tem.__proto__ === Sep.prototype)
             return true;
         tem = tem.__proto__
     }
 
-    return false;
+    return false;*/
 }
 
 function isAstOfRepeat(obj){
