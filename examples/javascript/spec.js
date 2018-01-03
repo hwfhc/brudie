@@ -1,22 +1,85 @@
 const generator = require('../../src/index');
+const {
+    TokGen,
+    ModeGen,
+    tokenStream,
+    rule,
+    ENV
+} = generator;
 
-const ENV = generator.ENV;
+const sep = new TokGen({
+    MATCH: /^(\(|\)|,|\.)/,
+    type: 'sep',
+    isStrictEqual: true
+});
+const ident = new TokGen({
+    MATCH: /^[a-zA-Z_]+/,
+    type: 'ident',
+    eval: function () {
+        return this.value;
+    }
+});
+const html = new TokGen({
+    MATCH: /^[^(`|{{|}})]+/,
+    type: 'html',
+    eval: function () {
+        return this.value;
+    }
+});
+const num = new TokGen({
+    MATCH: /^[0-9]+/,
+    type: 'num',
+    eval: function () {
+        return this.value;
+    }
+});
 
-const rule = generator.rule;
-const tokenStream = generator.tokenStream;
+const code = new TokGen({
+    MATCH: /^({{|}})/,
+    type: 'code',
+    hidden: true,
+    isStrictEqual: true,
+});
+const quo = new TokGen({
+    MATCH: /^(`)/,
+    type: 'quo',
+    hidden: true,
+    isStrictEqual: true,
+});
+const punc = new TokGen({
+    MATCH: /^(\(|\)|,|\.)/,
+    type: 'punc',
+    hidden: true,
+    isStrictEqual: true,
+});
 
-const Ident = generator.Ident;
-const Punc = generator.Punc;
-const Num = generator.Num;
-const Sep = generator.Sep;
-const Html = generator.Html;
 
-var ident = new Ident();
-var num = new Num();
-var html = new Html();
+const mode = new ModeGen({
+    switch: function (char) {
+        if (char === '{{')
+            this.list = this.rule[2];
+
+
+        if (char === '}}')
+            this.list = this.rule[0];
+
+        if (char === '`') {
+            if (this.list === this.rule[1])
+                this.list = this.rule[2];
+            else
+                this.list = this.rule[1];
+        }
+
+    },
+    rule: [
+        [html, code],//outCode
+        [html, quo],//inStr
+        [num, ident, quo, punc, code]//outStr
+    ]
+});
 
 // dot : ident {'.' ident} 
-var dot = rule('dot').ast(ident).repeat([sep('.'), ident]).setEval(
+var dot = rule('dot').add(ident).repeat([sep('.'), ident]).setEval(
     function () {
         var arr = [];
 
@@ -28,7 +91,7 @@ var dot = rule('dot').ast(ident).repeat([sep('.'), ident]).setEval(
 );
 
 // str : '`' html '`' 
-var str = rule('str').sep('`').ast(html).sep('`').setEval(
+var str = rule('str').add(sep('`')).add(html).add(sep('`')).setEval(
     function () {
         return this.getFirstChild().eval();
     }
@@ -42,7 +105,7 @@ var arg = rule('arg').or([str, dot, num]).setEval(
 );
 
 // call : ident '(' arg {',' arg} ')'
-var call = rule('call').ast(ident).sep('(').ast(arg).repeat([sep(','),arg]).sep(')').setEval(
+var call = rule('call').add(ident).add(sep('(')).add(arg).repeat([sep(','),arg]).add(sep(')')).setEval(
     function (){
         var func = this.getFirstChild().eval();
         var args = [];
@@ -63,7 +126,7 @@ var call = rule('call').ast(ident).sep('(').ast(arg).repeat([sep(','),arg]).sep(
 );
 
 // stmt : [html] '{{' call '}}' [html]
-var stmt = rule('stmt').maybe([html]).sep('{{').or([call, dot]).sep('}}').maybe([html]).setEval(
+var stmt = rule('stmt').maybe([html]).add(sep('{{')).or([call, dot]).add(sep('}}')).maybe([html]).setEval(
     async function () {
         var str = '';
 
@@ -81,12 +144,8 @@ var stmt = rule('stmt').maybe([html]).sep('{{').or([call, dot]).sep('}}').maybe(
 );
 
 
-function sep(value){
-    return new Sep(value);
-}
-
 module.exports = async function (code,callback){
-    var ts = new tokenStream(code);
+    var ts = new tokenStream(code,mode);
 
     if(isError(ts)){
         callback(ts);

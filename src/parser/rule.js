@@ -57,10 +57,10 @@ class Rule{
             var result = item.match(tokenStream);
 
             if(isAstOfRepeat(result))
-                result.forEach(item => addChildWithoutSep(ast,item));
+                result.forEach(item => addChildWithoutHidden(ast,item));
 
             if(!isAstOfRepeat(result) && !isError(result))
-                addChildWithoutSep(ast,result);
+                addChildWithoutHidden(ast,result);
 
             if(!isAstOfRepeat(result) && isError(result))
                 return result;
@@ -72,8 +72,8 @@ class Rule{
 
 }
 
-function addChildWithoutSep(ast,item){
-    if(!isSep(item))
+function addChildWithoutHidden(ast,item){
+    if(!isHidden(item))
         ast.addChild(item);
 }
 
@@ -81,16 +81,8 @@ function isError(obj){
     return obj.__proto__ === Error.prototype;
 }
 
-function isSep(tok){
+function isHidden(tok){
     return tok.hidden === true;
-
-    /*while(tem){
-        if(tem.__proto__ === Sep.prototype)
-            return true;
-        tem = tem.__proto__
-    }
-
-    return false;*/
 }
 
 function isAstOfRepeat(obj){

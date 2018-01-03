@@ -1,11 +1,13 @@
-
-class TokenStream{
-    constructor(code,Mode){
+class TokenStream {
+    constructor(code, mode) {
         this.index = -1;
-        this.stream = scan(code,Mode);
 
-        if(isError(this.stream))
-            return this.stream;
+        var result = scan(code, mode);
+
+        if (isError(result))
+            return result;
+
+        this.stream = result;
     }
 
     next(){
@@ -52,7 +54,7 @@ function scan(str,Mode){
             if(!result)
                 continue;
 
-            mode.switch(result[0]);
+            mode.switchMatchList(result[0]);
 
             str = str.substr(result[0].length);
             return new item(result[0]);

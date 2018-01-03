@@ -1,12 +1,7 @@
 "use strict";
 module.exports = {
     set,
-    get,
-    setItem,
-    getItem,
-    getTem,
-
-    getItemChild
+    get
 };
 
 const scope = {
@@ -62,22 +57,6 @@ function get(ident) {
     }
 }
 
-
-function getTem() {
-    return scope.tem;
-}
-
-function getItem(ident){
-    return scope.item;
-}
-
-function getItemChild(child){
-    return scope.item[child];
-}
-
-function setItem(){
-    scope.item = scope['tem'].splice(0,1)[0];
-}
 
 function sendReq(url){
     return new Promise((resolve,reject) => {
