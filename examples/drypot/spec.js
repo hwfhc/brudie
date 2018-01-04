@@ -78,12 +78,71 @@ const mode = new ModeGen({
     ]
 });
 
-// arg : ident '=' ident 
-var equal = rule('equal').add(ident).add(sep('=')).add(ident).setEval(
+// dot : ident {'.' ident} 
+var dot = rule('dot').add(ident).repeat([sep('.'), ident]).setEval(
+    function () {
+        var arr = [];
+
+        for (var i = 0; i < this.getNumberOfChild(); i++)
+            arr.push(this.getChild(i).value);
+
+        return ENV.getScope().get(arr);
+    }
+);
+
+// str : '`' html '`' 
+var str = rule('str').add(sep('`')).add(html).add(sep('`')).setEval(
     function () {
         return this.getFirstChild().eval();
     }
 );
+
+// arg : str | dot | num 
+var arg = rule('arg').or([str, dot, num]).setEval(
+    function () {
+        return this.getFirstChild().eval();
+    }
+);
+
+// call : ident '(' arg {',' arg} ')'
+var call = rule('call').add(ident).add(sep('(')).add(arg).repeat([sep(','),arg]).add(sep(')')).setEval(
+    function (){
+        var func = this.getFirstChild().eval();
+        var args = [];
+
+        for (var i = 1; i < this.getNumberOfChild(); i++) {
+            var item = this.getChild(i).eval();
+            args.push(this.getChild(i).eval());
+
+            if (isError(item))
+                return item;
+        }
+
+        if (isError(func))
+            return func;
+
+        return ENV.call(func, args);
+    }
+);
+
+// stmt : [html] '{{' call '}}' [html]
+var stmt = rule('stmt').maybe([html]).add(sep('{{')).or([call, dot]).add(sep('}}')).maybe([html]).setEval(
+    async function () {
+        var str = '';
+
+        for (var i = 0; i < this.getChildren().length; i++) {
+            var result = await this.getChildren()[i].eval();
+
+            if (isError(result))
+                return result;
+
+            str += result;
+        }
+
+        return str;
+    }
+);
+
 
 module.exports = async function (code,callback){
     var ts = new tokenStream(code,mode);
@@ -93,7 +152,7 @@ module.exports = async function (code,callback){
         return;
     }
 
-    var ast =  equal.match(ts);
+    var ast =  stmt.match(ts);
     
     if(isError(ast)){
         callback(ast);

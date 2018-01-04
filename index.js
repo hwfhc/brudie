@@ -1,6 +1,6 @@
-const exec = require('./examples/javascript/spec')
+const exec = require('./examples/drypot/spec')
 
-exec('my name is {{bool.a}} 165', (err,data) => {
+exec('adf {{bool.a}} adf', (err,data) => {
     if(err)
         console.log(err);
     else
