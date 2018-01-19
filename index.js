@@ -1,6 +1,6 @@
-const exec = require('./examples/drypot/spec')
+const exec = require('./examples/markdown/spec')
 
-exec('adf {{bool.a}} adf', (err,data) => {
+exec('##adf', (err,data) => {
     if(err)
         console.log(err);
     else
