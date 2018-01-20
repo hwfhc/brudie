@@ -1,4 +1,4 @@
-const generator = require('../../src/index');
+const generator = require('../../index');
 const {
     TokGen,
     ModeGen,

@@ -7,13 +7,13 @@ const {
     ENV
 } = generator;
 
-const two = new TokGen({
+const punc = new TokGen({
     MATCH: /^(##)/,
-    type: 'two',
+    type: 'punc',
     isStrictEqual: true,
     hidden: true
 });
-const ident = new TokGen({
+const str = new TokGen({
     MATCH: /^[a-zA-Z_]+/,
     type: 'ident',
     eval: function () {
@@ -25,35 +25,35 @@ const mode = new ModeGen({
     switch: function (char) {
     },
     rule: [
-        [two,ident]
+        [punc, str]
     ]
 });
 
-// title : ## ident 
-var title = rule('title').add(two('##')).add(ident).setEval(
-function(){
+// title : ## str 
+var title = rule('title').add(punc('##')).add(str).setEval(
+    function () {
         return `<h1>${this.getFirstChild().eval()}</h1>`;
     }
 );
 
-module.exports = async function (code,callback){
-    var ts = new tokenStream(code,mode);
+module.exports = async function (code, callback) {
+    var ts = new tokenStream(code, mode);
 
-    if(isError(ts)){
+    if (isError(ts)) {
         callback(ts);
         return;
     }
 
-    var ast =  title.match(ts);
-    
-    if(isError(ast)){
+    var ast = title.match(ts);
+
+    if (isError(ast)) {
         callback(ast);
         return;
     }
 
-    callback(null,await ast.eval());
+    callback(null, await ast.eval());
 }
 
-function isError(obj){
+function isError(obj) {
     return obj.__proto__ === Error.prototype;
 }

@@ -9,7 +9,10 @@ function ModeGen(config) {
         this.list = this.rule[0];
 
         // the rule of change match list
-        this.switchMatchList = config.switch;
+        if (config.switch)
+            this.switchMatchList = config.switch;
+        else
+            this.switchMatchList = () => { };
 
         this.getMatchList = () => { return this.list };
     }
