@@ -29,7 +29,7 @@ const mode = new ModeGen({
     ]
 });
 
-// title : ## str 
+// title : ## str
 var title = rule('title').add(punc('##')).add(str).setEval(
     function () {
         return `<h1>${this.getFirstChild().eval()}</h1>`;

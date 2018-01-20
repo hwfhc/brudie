@@ -4,7 +4,7 @@
   "description": "a interpreter\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[ based on js",
   "main": "index.js",
   "scripts": {
-    "build": "node build/build.js"
+    "test": ""
   },
   "repository": {
     "type": "git",
@@ -17,7 +17,5 @@
   },
   "homepage": "https://github.com/hwfhc/drypot-interpreter#readme",
   "dependencies": {},
-  "devDependencies": {
-    "webpack": "^3.10.0"
-  }
+  "devDependencies": {}
 }

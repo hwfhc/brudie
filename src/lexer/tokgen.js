@@ -4,12 +4,12 @@ function generator(config) {
     // read properties of config
     var MATCH = config.MATCH;
     var type = config.type;
-    var eval = config.eval;
+    var evalFunc = config.eval;
     var isStrictEqual = config.isStrictEqual;
     var hidden = config.hidden;
 
     // create prototype of token constructor
-    var proto = { eval, MATCH };
+    var proto = { eval: evalFunc, MATCH };
 
     // create token constructor
     var tok = function (value) {
@@ -29,7 +29,7 @@ function generator(config) {
     tok.match = isStrictEqual? matchValueEqual : matchTokTypeEqual;
     proto.match = tok.match;
 
-    // set prototype 
+    // set prototype
     tok.prototype = proto;
     tok.__proto__ = proto;
 
