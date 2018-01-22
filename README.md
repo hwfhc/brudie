@@ -5,21 +5,61 @@
 ---
 这是一个通过设置定义文件自动生成简单解释器的项目。使用JavaScript编写。
 
-以下是一个使用的例子：  
-我还没写好
+以下是一个使用的例子： 
+```
+const generator = require('../../src/index');
+const {
+    TokGen,
+    ModeGen,
+    rule,
+    getInterpreter,
+    ENV
+} = generator;
+
+const punc = new TokGen({
+    MATCH: /^(##)/,
+    type: 'punc',
+    isStrictEqual: true,
+    hidden: true
+});
+const str = new TokGen({
+    MATCH: /^[a-zA-Z_]+/,
+    type: 'ident',
+    eval: function () {
+        return this.value;
+    }
+});
+
+const mode = new ModeGen({
+    switch: function (char) {
+    },
+    rule: [
+        [punc, str]
+    ]
+});
+
+// title : ## str
+var title = rule('title').add(punc('##')).add(str).setEval(
+    function () {
+        return `<h1>${this.getFirstChild().eval()}</h1>`;
+    }
+);
+
+
+module.exports = getInterpreter(mode,title);
+```
 
 ## TokGen
 ---
 TokGen用于定义一个新的token，使用方法如下：
 ```js
 const punc = new TokGen({
-    MATCH: /^(\(|\)|,|\.)/,
+    MATCH: /^(##)/,
     type: 'punc',
-    hidden: true,
     isStrictEqual: true,
+    hidden: true
 });
-
-const ident = new TokGen({
+const str = new TokGen({
     MATCH: /^[a-zA-Z_]+/,
     type: 'ident',
     eval: function () {

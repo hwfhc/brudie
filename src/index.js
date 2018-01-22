@@ -6,7 +6,32 @@ const tokenStream = require('./lexer/tokenStream');
 const TokGen = require('./lexer/tokgen');
 const ModeGen = require('./lexer/modegen');
 
+function getInterpreter(mode, grammar) {
+
+    return async function (code, callback) {
+        var ts = new tokenStream(code, mode);
+
+        if (isError(ts)) {
+            callback(ts);
+            return;
+        }
+
+        var ast = grammar.match(ts);
+
+        if (isError(ast)) {
+            callback(ast);
+            return;
+        }
+
+        callback(null, await ast.eval());
+    }
+
+}
+
+function isError(obj) {
+    return obj.__proto__ === Error.prototype;
+}
 
 module.exports = {
-    ENV,rule,tokenStream,TokGen,ModeGen
+    ENV, rule, TokGen, ModeGen, getInterpreter
 }

@@ -2,8 +2,8 @@ const generator = require('../../src/index');
 const {
     TokGen,
     ModeGen,
-    tokenStream,
     rule,
+    getInterpreter,
     ENV
 } = generator;
 
@@ -36,24 +36,5 @@ var title = rule('title').add(punc('##')).add(str).setEval(
     }
 );
 
-module.exports = async function (code, callback) {
-    var ts = new tokenStream(code, mode);
 
-    if (isError(ts)) {
-        callback(ts);
-        return;
-    }
-
-    var ast = title.match(ts);
-
-    if (isError(ast)) {
-        callback(ast);
-        return;
-    }
-
-    callback(null, await ast.eval());
-}
-
-function isError(obj) {
-    return obj.__proto__ === Error.prototype;
-}
+module.exports = getInterpreter(mode,title);
