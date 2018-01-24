@@ -7,6 +7,19 @@
 
 以下是一个使用的例子： 
 ```
+// index.js
+// result is <h1>adf</h1>
+const exec = require('./spec')
+
+exec('##adf', (err,data) => {
+    if(err)
+        console.log(err);
+    else
+        console.log(data);
+});
+```
+```
+// sepc.js
 const generator = require('../../src/index');
 const {
     TokGen,
@@ -49,7 +62,10 @@ var title = rule('title').add(punc('##')).add(str).setEval(
 module.exports = getInterpreter(mode,title);
 ```
 
-## TokGen
+## API
+
+
+### TokGen
 ---
 TokGen用于定义一个新的token，使用方法如下：
 ```js
@@ -85,31 +101,15 @@ const str = new TokGen({
 **eval：**  
 解释运行时需要调用的函数。
 
-## ModeGen
+### ModeGen
 ---
 ModeGen用于创建token匹配模式，使用方法如下：
 ```js
 const mode = new ModeGen({
     switch: function (char) {
-        if (char === '{{')
-            this.list = this.rule[2];
-
-
-        if (char === '}}')
-            this.list = this.rule[0];
-
-        if (char === '`') {
-            if (this.list === this.rule[1])
-                this.list = this.rule[2];
-            else
-                this.list = this.rule[1];
-        }
-
     },
     rule: [
-        [html, code],//outCode
-        [html, quo],//inStr
-        [num, ident, quo, punc, code]//outStr
+        [punc, str]
     ]
 });
 ```
@@ -117,45 +117,19 @@ const mode = new ModeGen({
 **switch：**  
 token匹配模式切换函数，传入下一个token的值，若符合一定条件则可切换匹配模式。
 
-**rule：**
+**rule：**   
 用于存储多个token匹配模式的数组。
-## tokenStream
+
+### rule
 ---
-创建token流，使用方法如下：
-```js
-var ts = new tokenStream(code,mode);
+定义语法规则，使用方法如下：
 ```
-**code：**   
-要解析的代码。
-
-**mode：**  
-token匹配模式，ModeGen的实例。
-
-## rule
----
-定义语法规则，使用方法如下
-```js
-// str : '`' html '`' 
-var str = rule('str').add(sep('`')).add(html).add(sep('`')).setEval(
+// title : ## str
+var title = rule('title').add(punc('##')).add(str).setEval(
     function () {
-        return this.getFirstChild().eval();
+        return `<h1>${this.getFirstChild().eval()}</h1>`;
     }
 );
 ```
 
-
-## ENV
----
-运行环境，使用方法如下：
-```js
-ENV.call(func, args);
-ENV.getScope();
-```
-
-**call:**  
-调用函数
-+ func：函数名
-+ args：参数
-
-**getScope：**  
-获取作用域
+调用rule函数生成语法规则，使用add函数给语法规则添加token，使用setEval函数设置语句的求值函数
