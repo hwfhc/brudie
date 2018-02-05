@@ -80,8 +80,9 @@ function isSameToken(tok1, tok2) {
     else
         return false;
 }
-function isValueEqual(tok1, tok2) {
-    return tok1.value === tok2.value;
+
+function isValueEqual(RuleTok, StreamTok) {
+    return RuleTok.value === StreamTok.value;
 }
 
 

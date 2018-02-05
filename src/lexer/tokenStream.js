@@ -38,7 +38,7 @@ function scan(str,Mode){
         var result = getOneToken();
 
         if(!result){
-            return new Error(`Unexpected token \'${str}\'`);
+            return new Error(`Unexpected token \'${str.replace('\n','\\n')}\'`);
         }
 
         stream.push(result);
