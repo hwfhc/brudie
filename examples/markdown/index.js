@@ -2,6 +2,7 @@ const exec = require('./spec')
 
 var str = `##adf
 heiheihei
+**wawa**
 `;
 
 exec(str, (err, data) => {
