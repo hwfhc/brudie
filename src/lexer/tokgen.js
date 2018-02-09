@@ -38,8 +38,9 @@ function generator(config) {
 
 function matchTokTypeEqual(tokenStream) {
     var tok = tokenStream.peek();
-    if (!tok)
-        return new Error(`no tok rest`);
+
+    if(!tok)
+        return new Error(`no tok in tokenStream`);
 
     if (isSameToken(this, tok)) {
         tokenStream.next();
@@ -58,6 +59,9 @@ function matchTokTypeEqual(tokenStream) {
 }
 function matchValueEqual(tokenStream) {
     var tok = tokenStream.peek();
+
+    if(!tok)
+        return new Error(`no tok in tokenStream`);
 
     if (isValueEqual(this, tok) /*&& isInheritedSep(this.inherit,tok)*/) {
         tokenStream.next();

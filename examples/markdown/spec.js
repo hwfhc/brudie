@@ -60,7 +60,7 @@ var stmt = rule('stmt').or([title,black,item,para]).add(punc('\n')).setEval(
     }
 );
 
-var text = rule('text').add(stmt).add(stmt).add(stmt).add(stmt).setEval(
+var text = rule('text').repeat([stmt]).setEval(
     function () {
         var str = '';
         var arr = this.getChildren();
