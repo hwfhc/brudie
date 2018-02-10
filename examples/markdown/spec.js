@@ -48,25 +48,44 @@ var para = rule('para').add(str).setEval(
     }
 );
 
-var item = rule('item').add(punc('+')).add(str).setEval(
+var item = rule('item').add(punc('+')).or([para,black]).setEval(
     function () {
         return `<li>${this.getFirstChild().eval()}</li>`;
     }
 );
 
-var stmt = rule('stmt').or([title,black,item,para]).add(punc('\n')).setEval(
+var list = rule('list').add(item).add(punc('\n')).repeat([item,punc('\n')]).setEval(
+    function () {
+        var str = '';
+        var arr = this.getChildren();
+
+        arr.forEach((item) => {
+            str += `${item.eval()}`;
+        });
+
+        return `<ul>${str}</ul>`;
+    }
+);
+
+var stmt = rule('stmt').or([title, black, para]).add(punc('\n')).setEval(
     function () {
         return `${this.getFirstChild().eval()}`;
     }
 );
 
-var text = rule('text').repeat([stmt]).setEval(
+var elem = rule('elem').or([list, stmt]).setEval(
+    function () {
+        return `${this.getFirstChild().eval()}`;
+    }
+);
+
+var text = rule('text').repeat([elem]).setEval(
     function () {
         var str = '';
         var arr = this.getChildren();
 
         arr.forEach((item)=>{
-            str += item.getFirstChild().eval();
+            str += item.eval();
         });
 
         return str;
