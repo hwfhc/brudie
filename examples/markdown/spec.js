@@ -8,7 +8,7 @@ const {
 } = generator;
 
 const punc = new TokGen({
-    MATCH: /^((##)|(\*\*)|(\+)|\n)/,
+    MATCH: /^((##)|(\*\*)|(\+)|(\`\`\`)|\n)/,
     type: 'punc',
     isStrictEqual: true,
     hidden: true
@@ -30,7 +30,7 @@ const mode = new ModeGen({
 });
 
 // title : ## str
-var title = rule('title').add(punc('##')).add(str).setEval(
+var title = rule('title').add(punc('##')).add(str).add(punc('\n')).setEval(
     function () {
         return `<h1>${this.getFirstChild().eval()}</h1>`;
     }
@@ -42,19 +42,48 @@ var black = rule('black').add(punc('**')).add(str).add(punc('**')).setEval(
     }
 );
 
-var para = rule('para').add(str).setEval(
+var code = rule('code').add(punc('\`\`\`')).add(str).add(punc('\`\`\`')).setEval(
     function () {
-        return `<p>${this.getFirstChild().eval()}</p>`;
+        return `<code>${this.getFirstChild().eval()}</code>`
     }
 );
 
-var item = rule('item').add(punc('+')).or([para,black]).setEval(
+
+
+
+var inline = rule('inline').or([black, code, str]).setEval(
     function () {
-        return `<li>${this.getFirstChild().eval()}</li>`;
+        return `${this.getFirstChild().eval()}`;
     }
 );
 
-var list = rule('list').add(item).add(punc('\n')).repeat([item,punc('\n')]).setEval(
+var para = rule('para').repeat([inline]).add(punc('\n')).setEval(
+    function () {
+        var str = '';
+        var arr = this.getChildren();
+
+        arr.forEach((item) => {
+            str += item.eval();
+        });
+
+        return str;
+    }
+);
+
+var item = rule('item').add(punc('+')).repeat([inline]).setEval(
+    function () {
+        var str = '';
+        var arr = this.getChildren();
+
+        arr.forEach((item) => {
+            str += item.eval();
+        });
+
+        return `<li>${str}</li>`;
+    }
+);
+
+var list = rule('list').add(item).add(punc('\n')).repeat([item, punc('\n')]).setEval(
     function () {
         var str = '';
         var arr = this.getChildren();
@@ -66,20 +95,13 @@ var list = rule('list').add(item).add(punc('\n')).repeat([item,punc('\n')]).setE
         return `<ul>${str}</ul>`;
     }
 );
-
-var stmt = rule('stmt').or([title, black, para]).add(punc('\n')).setEval(
+var stmt = rule('stmt').or([list,title,para]).setEval(
     function () {
         return `${this.getFirstChild().eval()}`;
     }
 );
 
-var elem = rule('elem').or([list, stmt]).setEval(
-    function () {
-        return `${this.getFirstChild().eval()}`;
-    }
-);
-
-var text = rule('text').repeat([elem]).setEval(
+var text = rule('text').repeat([stmt]).setEval(
     function () {
         var str = '';
         var arr = this.getChildren();

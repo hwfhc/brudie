@@ -19,7 +19,10 @@ class Repeat{
                 break;
         }
 
-        return astArr;
+        if (astArr.length === 0)
+            return new Error(`not repeat at all: ${tokenStream.index} ${tokenStream.peek(0)}`);
+        else
+            return astArr;
     }
 }
 

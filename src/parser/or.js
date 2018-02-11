@@ -7,23 +7,26 @@ class Or{
     }
 
     match(tokenStream){
-        var ast = new Error('not match in ',this);
+        var ast = new Error('not match in ', this);
 
-        this.branch.forEach(item => {
+        var arr = this.branch;
+
+        for (var i = 0; i < arr.length; i++) {
+            var item = arr[i];
             var rollbackPoint = tokenStream.createRollbackPoint();
-            var result =  item.match(tokenStream);
+            var result = item.match(tokenStream);
 
-            if(isError(result))
+            if (isError(result))
                 tokenStream.rollback(rollbackPoint);
             else
-                ast = result;
-        });
+                return result;
+        }
 
         return ast;
     }
 }
 
-function isError(obj){
+function isError(obj) {
     return obj.__proto__ === Error.prototype;
 }
 
