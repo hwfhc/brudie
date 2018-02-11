@@ -8,7 +8,7 @@ const {
 } = generator;
 
 const punc = new TokGen({
-    MATCH: /^((##)|(\*\*)|(\+)|(\`\`\`)|\n)/,
+    MATCH: /^((##)|(\*\*)|(\+)|(\`\`\`)|\s|\n)/,
     type: 'punc',
     isStrictEqual: true,
     hidden: true
@@ -30,7 +30,7 @@ const mode = new ModeGen({
 });
 
 // title : ## str
-var title = rule('title').add(punc('##')).add(str).add(punc('\n')).setEval(
+var title = rule('title').add(punc('##')).add(punc(' ')).add(str).add(punc('\n')).setEval(
     function () {
         return `<h1>${this.getFirstChild().eval()}</h1>`;
     }
@@ -70,7 +70,7 @@ var para = rule('para').repeat([inline]).add(punc('\n')).setEval(
     }
 );
 
-var item = rule('item').add(punc('+')).repeat([inline]).setEval(
+var item = rule('item').add(punc('+')).add(punc(' ')).repeat([inline]).setEval(
     function () {
         var str = '';
         var arr = this.getChildren();

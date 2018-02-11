@@ -1,9 +1,9 @@
 const exec = require('./spec')
 
-var str = `##adfas
+var str = `## adfas
 heiheihei**wawa**\`\`\`adf\`\`\`
-+**asdf**
-+zdsf**eaf**eff
++ **asdf**
++ zdsf**eaf**eff
 `;
 
 exec(str, (err, data) => {
