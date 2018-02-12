@@ -6,9 +6,7 @@ class Or{
         this.branch = branch;
     }
 
-    match(tokenStream){
-        var ast = new Error('not match in ', this);
-
+    match(tokenStream) {
         var arr = this.branch;
 
         for (var i = 0; i < arr.length; i++) {
@@ -16,18 +14,31 @@ class Or{
             var rollbackPoint = tokenStream.createRollbackPoint();
             var result = item.match(tokenStream);
 
-            if (isError(result))
-                tokenStream.rollback(rollbackPoint);
-            else
+            if (!isError(result))
                 return result;
+            else
+                tokenStream.rollback(rollbackPoint);
         }
 
-        return ast;
+        return new Error(formErrMessage(tokenStream));
     }
 }
 
 function isError(obj) {
     return obj.__proto__ === Error.prototype;
+}
+
+function formErrMessage(tokenStream) {
+    var errMessage = '';
+
+    if (tokenStream.peek())
+        errMessage += tokenStream.peek().value;
+    if (tokenStream.peek(2))
+        errMessage += tokenStream.peek(2).value;
+    if (tokenStream.peek(3))
+        errMessage += tokenStream.peek(3).value;
+
+    return `not match in: ${tokenStream.getIndex()} ${errMessage}`;
 }
 
 module.exports = Or;

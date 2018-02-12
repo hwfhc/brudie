@@ -13,16 +13,13 @@ class Repeat{
         while(1){
             var result = matchOnce(this.list,tokenStream);
 
-            if(result)
-                insertAtLastOfArr(astArr,result);
+            if (result)
+                insertAtLastOfArr(astArr, result);
             else
                 break;
         }
 
-        if (astArr.length === 0)
-            return new Error(`not repeat at all: ${tokenStream.index} ${tokenStream.peek(0)}`);
-        else
-            return astArr;
+        return astArr;
     }
 }
 

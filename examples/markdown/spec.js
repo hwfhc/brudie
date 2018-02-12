@@ -29,13 +29,10 @@ const mode = new ModeGen({
     ]
 });
 
-// title : ## str
-var title = rule('title').add(punc('##')).add(punc(' ')).add(str).add(punc('\n')).setEval(
-    function () {
-        return `<h1>${this.getFirstChild().eval()}</h1>`;
-    }
-);
-
+/* inline
+ *
+ */
+ 
 var black = rule('black').add(punc('**')).add(str).add(punc('**')).setEval(
     function () {
         return `<b>${this.getFirstChild().eval()}</b>`;
@@ -48,12 +45,22 @@ var code = rule('code').add(punc('\`\`\`')).add(str).add(punc('\`\`\`')).setEval
     }
 );
 
-
-
-
 var inline = rule('inline').or([black, code, str]).setEval(
     function () {
         return `${this.getFirstChild().eval()}`;
+    }
+);
+
+
+
+/*
+ * block
+ */
+
+// title : ## str
+var title = rule('title').add(punc('##')).add(punc(' ')).add(str).add(punc('\n')).setEval(
+    function () {
+        return `<h1>${this.getFirstChild().eval()}</h1>`;
     }
 );
 
@@ -95,13 +102,14 @@ var list = rule('list').add(item).add(punc('\n')).repeat([item, punc('\n')]).set
         return `<ul>${str}</ul>`;
     }
 );
+
 var stmt = rule('stmt').or([list,title,para]).setEval(
     function () {
         return `${this.getFirstChild().eval()}`;
     }
 );
 
-var text = rule('text').repeat([stmt]).setEval(
+var text = rule('text').all([stmt]).setEval(
     function () {
         var str = '';
         var arr = this.getChildren();

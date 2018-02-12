@@ -46,14 +46,7 @@ function matchTokTypeEqual(tokenStream) {
         tokenStream.next();
         return tok;
     } else {
-        var errMessage = tok.value;
-
-        if (tokenStream.peek(2))
-            errMessage += tokenStream.peek(2).value;
-        if (tokenStream.peek(3))
-            errMessage += tokenStream.peek(3).value;
-
-        return new Error(`not match in ${errMessage}`);
+        return new Error(formErrMessage(tokenStream));
     }
 
 }
@@ -63,18 +56,11 @@ function matchValueEqual(tokenStream) {
     if(!tok)
         return new Error(`no tok in tokenStream`);
 
-    if (isValueEqual(this, tok) /*&& isInheritedSep(this.inherit,tok)*/) {
+    if (isValueEqual(this, tok)) {
         tokenStream.next();
         return tok;
     } else {
-        var errMessage = tok.value;
-
-        if (tokenStream.peek(2))
-            errMessage += tokenStream.peek(2).value;
-        if (tokenStream.peek(3))
-            errMessage += tokenStream.peek(3).value;
-
-        return new Error(`not match in ${errMessage}`);
+        return new Error(formErrMessage(tokenStream));
     }
 
 }
@@ -89,4 +75,14 @@ function isValueEqual(RuleTok, StreamTok) {
     return RuleTok.value === StreamTok.value;
 }
 
+function formErrMessage(tokenStream) {
+    var errMessage = tokenStream.peek().value;
+
+    if (tokenStream.peek(2))
+        errMessage += tokenStream.peek(2).value;
+    if (tokenStream.peek(3))
+        errMessage += tokenStream.peek(3).value;
+
+    return `not match in: ${tokenStream.getIndex()} ${errMessage}`;
+}
 

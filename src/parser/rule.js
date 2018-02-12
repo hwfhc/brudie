@@ -1,5 +1,6 @@
 const AST = require('./ast');
 const Repeat = require('./repeat');
+const All = require('./all');
 const Maybe = require('./maybe');
 const Or = require('./or');
 
@@ -17,12 +18,6 @@ class Rule{
         return this;
     }
 
-    sep(str){
-        this.list.push(new Sep(str));
-
-        return this;
-    }
-
     or(arg){
         this.list.push(new Or(arg));
 
@@ -31,6 +26,12 @@ class Rule{
 
     repeat(arg){
         this.list.push(new Repeat(arg));
+
+        return this;
+    }
+
+    all(arg) {
+        this.list.push(new All(arg));
 
         return this;
     }
@@ -56,7 +57,7 @@ class Rule{
 
             var result = item.match(tokenStream);
 
-            if(isAstOfRepeat(result))
+            if(isAstOfRepeat(result) && !isError(result))
                 result.forEach(item => addChildWithoutHidden(ast,item));
 
             if(!isAstOfRepeat(result) && !isError(result))

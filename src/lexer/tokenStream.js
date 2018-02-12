@@ -15,6 +15,16 @@ class TokenStream {
         return this.stream[this.index];
     }
 
+
+    getIndex(){
+        return this.index;
+    }
+
+    isNull() {
+        return this.index === (this.stream.length - 1);
+    }
+
+
     peek(i=1){
       return this.stream[this.index+i];
     }
