@@ -1,3 +1,5 @@
+var line = 1;
+
 class TokenStream {
     constructor(code, mode) {
         this.index = -1;
@@ -10,14 +12,20 @@ class TokenStream {
         this.stream = result;
     }
 
-    next(){
+    next() {
         this.index++;
-        return this.stream[this.index];
+
+        var tok = this.stream[this.index];
+
+        if (tok.value === "\n") line++;
+
+        return tok;
     }
 
 
     getIndex(){
-        return this.index;
+        var a = line;
+        return line;
     }
 
     isNull() {
