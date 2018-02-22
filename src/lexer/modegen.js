@@ -6,9 +6,24 @@ function ModeGen(config) {
         this.rule = config.rule;
 
         // the current match list
-        this.list = this.rule[0];
+        if (this.rule.default === undefined)
+            throw new Error("Not set default rule of token match mode!");
 
-        // the rule of change match list
+        this.list = this.rule.default;
+
+        // int interface for user 
+        this.switch = function (state) {
+            if (this.rule[state] === undefined)
+                throw new Error("Switch to a illegal state.");
+
+            this.list = this.rule[state];
+        }
+
+        this.isState = function (state) {
+            return this.list === this.rule[state];
+        }
+
+        // init interface for inter
         if (config.switch)
             this.switchMatchList = config.switch;
         else

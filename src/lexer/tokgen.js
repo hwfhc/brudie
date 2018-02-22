@@ -6,7 +6,7 @@ function generator(config) {
     var type = config.type;
     var evalFunc = config.eval;
     var isStrictEqual = config.isStrictEqual;
-    var hidden = config.hidden;
+    var hidden = config.isHiddenInAST;
 
     // create prototype of token constructor
     var proto = { eval: evalFunc, MATCH };

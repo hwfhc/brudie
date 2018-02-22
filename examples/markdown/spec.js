@@ -7,30 +7,54 @@ const {
     ENV
 } = generator;
 
+/*
+ * token
+ */
+
 const punc = new TokGen({
-    MATCH: /^((##)|(\*\*)|(\+)|(\`\`\`)|\s|\n)/,
+    MATCH: /^((##)|(\*\*)|(\+)|\s|\n)/,
     type: 'punc',
     isStrictEqual: true,
-    hidden: true
+    isHiddenInAST: true
+});
+const quo = new TokGen({
+    MATCH: /^(\`\`\`)/,
+    type: 'quo',
+    isStrictEqual: true,
+    isHiddenInAST: true
 });
 const str = new TokGen({
     MATCH: /^[a-zA-Z_]+/,
-    type: 'ident',
+    type: 'str',
+    eval: function () {
+        return this.value;
+    }
+});
+const html = new TokGen({
+    MATCH: /^[^(\`\`\`)]+/,
+    type: 'html',
     eval: function () {
         return this.value;
     }
 });
 
 const mode = new ModeGen({
-    switch: function (char) {
+    switch: function (token) {
+        if (token === '\`\`\`') {
+            if (this.isState("default"))
+                this.switch("inCode");
+            else
+                this.switch("default");
+        }
     },
-    rule: [
-        [punc, str]
-    ]
+    rule: {
+        default: [punc, str, quo],
+        inCode: [quo, html]
+    }
 });
 
-/* inline
- *
+/* 
+ * inline
  */
  
 var black = rule('black').add(punc('**')).add(str).add(punc('**')).setEval(
@@ -39,7 +63,7 @@ var black = rule('black').add(punc('**')).add(str).add(punc('**')).setEval(
     }
 );
 
-var code = rule('code').add(punc('\`\`\`')).add(str).add(punc('\`\`\`')).setEval(
+var code = rule('code').add(punc('\`\`\`')).add(html).add(punc('\`\`\`')).setEval(
     function () {
         return `<code>${this.getFirstChild().eval()}</code>`
     }
