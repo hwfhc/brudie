@@ -5,13 +5,13 @@
 ---
 这是一个通过设置定义文件自动生成简单解释器的项目。使用JavaScript编写。
 
-以下是一个使用的例子： 
+以下是一个使用的简单例子： 
 ```
 // index.js
-// result is <h1>adf</h1>
+// 输入为##test，经过处理后结果为<h1>test</h1>
 const exec = require('./spec')
 
-exec('##adf', (err,data) => {
+exec('##test', (err,data) => {
     if(err)
         console.log(err);
     else
@@ -29,11 +29,20 @@ const {
     ENV
 } = generator;
 
+/* 
+ * token由TokGen函数生成，一个新的TokGen代表一种新的token。
+ * 其下的punc变量和str变量分别为两个不同的token。
+ * MATCH:为token的正则定义。
+ * type:token的类型标识。
+ * isStrictEqual:为true时代表在语法匹配时需要token的值相同，为false时只需要token类型相同(即为同一个TokGen制造)。
+ * isHiddenInAST:为true时表示token在最终的语法生成树中会隐藏(例如逗号、括号等标点符号)，为false则不隐藏
+ * eval:对token求值时运行的函数。如下面的str token返回自身的值，如果是一个该token设计为一个变量，则可调用相关接口从运* 行环境中读取相应的值。
+ */
 const punc = new TokGen({
     MATCH: /^(##)/,
     type: 'punc',
     isStrictEqual: true,
-    hidden: true
+    isHiddenInAST: true
 });
 const str = new TokGen({
     MATCH: /^[a-zA-Z_]+/,
@@ -43,13 +52,26 @@ const str = new TokGen({
     }
 });
 
+/*
+ * mode是token流的匹配模式。rule为多个匹配列表的集合，这里只有default列表(默认匹配列表，必须设置default)，即在对文本* 进行匹配时会生成punc和str两种token，若default值为[punc]，则只会生成punc一种token，遇到str时则会报错。
+ */
 const mode = new ModeGen({
-    switch: function (char) {
-    },
-    rule: [
-        [punc, str]
-    ]
+    rule: {
+        default: [punc, str]
+    }
 });
+
+/*
+ * rule是语法规则，通过链式调用来实现对语法规则的设定。
+ * 其中rule('title')是创建一个新的语法规则，并起名为title规则。
+ *
+ * add(punc('##'))为在语法规则中添加一个新的匹配项punc('##')，这里的punc即是之前定义的punc变量，punc('##')生成了一个* 值为##的punc类token。
+ * add(str)为在语法规则中添加新的匹配项str。
+ * 因此这条语法规则能够匹配诸如"##hehe"、"##adafe"这样的语句。
+ *
+ * 最后的setEval是设置语法规则在解释时的处理函数，他调用了规则匹配出的语法树第一项的eval函数，获取了其值并在前后加上
+ * <h1>与</h1>，并将此字符串返回，这就是我们最终得到的结果。
+ */
 
 // title : ## str
 var title = rule('title').add(punc('##')).add(str).setEval(
@@ -59,6 +81,7 @@ var title = rule('title').add(punc('##')).add(str).setEval(
 );
 
 
+// 此为对外接口，生成最终的解释器
 module.exports = getInterpreter(mode,title);
 ```
 
