@@ -18,25 +18,25 @@ class Rule{
         return this;
     }
 
-    or(arg){
+    or(...arg){
         this.list.push(new Or(arg));
 
         return this;
     }
 
-    repeat(arg){
+    repeat(...arg){
         this.list.push(new Repeat(arg));
 
         return this;
     }
 
-    all(arg) {
+    all(...arg) {
         this.list.push(new All(arg));
 
         return this;
     }
 
-    maybe(arg){
+    maybe(...arg){
         this.list.push(new Maybe(arg));
 
         return this;

@@ -69,7 +69,7 @@ var code = rule('code').add(punc('\`\`\`')).add(html).add(punc('\`\`\`')).setEva
     }
 );
 
-var inline = rule('inline').or([black, code, str]).setEval(
+var inline = rule('inline').or(black, code, str).setEval(
     function () {
         return `${this.getFirstChild().eval()}`;
     }
@@ -88,7 +88,7 @@ var title = rule('title').add(punc('##')).add(punc(' ')).add(str).add(punc('\n')
     }
 );
 
-var para = rule('para').repeat([inline]).add(punc('\n')).setEval(
+var para = rule('para').repeat(inline).add(punc('\n')).setEval(
     function () {
         var str = '';
         var arr = this.getChildren();
@@ -101,7 +101,7 @@ var para = rule('para').repeat([inline]).add(punc('\n')).setEval(
     }
 );
 
-var item = rule('item').add(punc('+')).add(punc(' ')).repeat([inline]).setEval(
+var item = rule('item').add(punc('+')).add(punc(' ')).repeat(inline).setEval(
     function () {
         var str = '';
         var arr = this.getChildren();
@@ -114,7 +114,7 @@ var item = rule('item').add(punc('+')).add(punc(' ')).repeat([inline]).setEval(
     }
 );
 
-var list = rule('list').add(item).add(punc('\n')).repeat([item, punc('\n')]).setEval(
+var list = rule('list').add(item).add(punc('\n')).repeat(item, punc('\n')).setEval(
     function () {
         var str = '';
         var arr = this.getChildren();
@@ -127,13 +127,13 @@ var list = rule('list').add(item).add(punc('\n')).repeat([item, punc('\n')]).set
     }
 );
 
-var stmt = rule('stmt').or([list,title,para]).setEval(
+var stmt = rule('stmt').or(list,title,para).setEval(
     function () {
         return `${this.getFirstChild().eval()}`;
     }
 );
 
-var text = rule('text').all([stmt]).setEval(
+var text = rule('text').all(stmt).setEval(
     function () {
         var str = '';
         var arr = this.getChildren();
