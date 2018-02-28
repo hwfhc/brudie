@@ -42,8 +42,8 @@ class Rule{
         return this;
     }
 
-    setEval(evaluate){
-        this.eval = evaluate;
+    setEval(evalFunc){
+        this.eval = evalFunc;
 
         return this;
     }
@@ -52,19 +52,15 @@ class Rule{
         var list = this.list;
         var ast = new AST(this.tag,this.eval);
 
-        for(var i=0;i<list.length;i++){
+        for (var i = 0; i < list.length; i++) {
             var item = list[i];
 
             var result = item.match(tokenStream);
 
-            if(isAstOfRepeat(result) && !isError(result))
-                result.forEach(item => addChildWithoutHidden(ast,item));
-
-            if(!isAstOfRepeat(result) && !isError(result))
-                addChildWithoutHidden(ast,result);
-
-            if(!isAstOfRepeat(result) && isError(result))
+            if (isError(result))
                 return result;
+
+            addChildWithoutHidden(ast, result);
         }
 
 
@@ -73,12 +69,20 @@ class Rule{
 
 }
 
-function addChildWithoutHidden(ast,item){
-    if(!isHidden(item))
-        ast.addChild(item);
+function addChildWithoutHidden(ast, newAst) {
+    if (isAstOfRepeat(newAst)) {
+        newAst.forEach(item => {
+            if (!isHidden(item))
+                ast.addChild(item);
+        });
+    }
+    else {
+        if (!isHidden(newAst))
+            ast.addChild(newAst);
+    }
 }
 
-function isError(obj){
+function isError(obj) {
     return obj.__proto__ === Error.prototype;
 }
 

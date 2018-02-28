@@ -11,7 +11,7 @@ function ModeGen(config) {
 
         this.list = this.rule.default;
 
-        // int interface for user 
+        // init interface for user 
         this.switch = function (state) {
             if (this.rule[state] === undefined)
                 throw new Error("Switch to a illegal state.");
