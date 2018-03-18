@@ -5,11 +5,6 @@ module.exports = {
 };
 
 const scope = {
-    bool: {
-        a : 1
-    },
-    tem: [],
-    item: {},
     ajax: async function (url){
         return await sendReq(url);
     },
@@ -17,10 +12,6 @@ const scope = {
         callback(window.location.pathname.split('/')[number]);
     }
 }
-
-/*function set(ident = undefined,value){
-    scope[ident] = value;
-}*/
 
 function set(ident, value) {
     if (isArray(ident)) {
@@ -39,20 +30,6 @@ function set(ident, value) {
     }
     else
         scope[ident] = value;
-
-
-    function formErr() {
-        if (isArray(ident)) {
-            var str = ident[0];
-
-            for (var j = i; j < i; j++)
-                str += `.${ident[j]}`;
-
-            return new Error(`variable is undefiend : ${str}`);
-        }
-        else
-            return new Error(`variable is undefiend : ${ident}`);
-    }
 }
 
 function get(ident) {
@@ -75,19 +52,6 @@ function get(ident) {
     }
 
     return tem;
-
-    function formErr() {
-        if (isArray(ident)) {
-            var str = ident[0];
-
-            for (var j = i; j < i; j++)
-                str += `.${ident[j]}`;
-
-            return new Error(`variable is undefiend : ${str}`);
-        }
-        else
-            return new Error(`variable is undefiend : ${ident}`);
-    }
 }
 
 
@@ -119,3 +83,16 @@ function getLast(arr) {
     else
         return arr;
 }
+
+function formErr(ident) {
+    if (isArray(ident)) {
+        var str = ident[0];
+
+        for (var j = i; j < i; j++)
+            str += `.${ident[j]}`;
+
+        return new Error(`variable is undefiend : ${str}`);
+    }
+    else
+        return new Error(`variable is undefiend : ${ident}`);
+    }

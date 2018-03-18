@@ -63,23 +63,16 @@ class Rule{
             addChildWithoutHidden(ast, result);
         }
 
-
         return ast;
     }
 
 }
 
 function addChildWithoutHidden(ast, newAst) {
-    if (isAstOfRepeat(newAst)) {
-        newAst.forEach(item => {
-            if (!isHidden(item))
-                ast.addChild(item);
-        });
-    }
-    else {
-        if (!isHidden(newAst))
-            ast.addChild(newAst);
-    }
+    if (isAstOfRepeat(newAst))
+        newAst.forEach(item => { if (!isHidden(item)) ast.addChild(item) });
+    else if (!isHidden(newAst))
+        ast.addChild(newAst);
 }
 
 function isError(obj) {
