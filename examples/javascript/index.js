@@ -1,6 +1,6 @@
 const exec = require('./spec')
 
-exec('##adf', (err,data) => {
+exec('a=b', (err,data) => {
     if(err)
         console.log(err);
     else
