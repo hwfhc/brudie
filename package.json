@@ -1,6 +1,6 @@
 {
   "name": "drypot-interpreter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "a interpreter\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[ based on js",
   "main": "index.js",
   "scripts": {
