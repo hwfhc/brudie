@@ -3,8 +3,8 @@ const ENV = require('./env');
 const rule = require('./parser/rule');
 
 const tokenStream = require('./lexer/tokenStream');
-const TokGen = require('./lexer/tokGen');
-const ModeGen = require('./lexer/modeGen');
+const TokGen = require('./lexer/tokgen');
+const ModeGen = require('./lexer/modegen');
 
 function getInterpreter(mode, grammar) {
 
