@@ -30,10 +30,14 @@ const {
 } = generator;
 
 /* 
- * token由TokGen函数生成，一个新的TokGen代表一种新的token。
+ * token意思为标识符。  
+ * 对代码进行词法分析后将生成一个token流，即一个标识符的序列，  
+ * 在本例中，当代码为##title时，则将生成一个token流，包含值分别为##与title的两个token（其类型也不相同）
+ * 而在drypot中，token由TokGen函数生成，一个新的TokGen代表一种新的token。
  * 其下的punc变量和str变量分别为两个不同的token。
- * MATCH:为token的正则定义。
- * type:token的类型标识。
+ *
+ * MATCH:为token的正则表达式定义。
+ * type:token的类型标识。主要在使用断点调试时作为标识。
  * isStrictEqual:为true时代表在语法匹配时需要token的值相同，为false时只需要token类型相同(即为同一个TokGen制造)。
  * isHiddenInAST:为true时表示token在最终的语法生成树中会隐藏(例如逗号、括号等标点符号)，为false则不隐藏
  * eval:对token求值时运行的函数。如下面的str token返回自身的值，如果是一个该token设计为一个变量，则可调用相关接口从运* 行环境中读取相应的值。
@@ -84,10 +88,21 @@ var title = rule('title').add(punc('##')).add(str).setEval(
 // 此为对外接口，生成最终的解释器
 module.exports = getInterpreter(mode,title);
 ```
+## 如何使用
+1. 使用npm下载module   
+```npm install drypot-interpreter```
+2. 编写解释器定义文件spec.js，其中第一行引用drypot-interpreter   
+```const generater = require('drypot-interpreter')```
+3. 引出定义文件spec.js接口（如上例）   
+```module.exports = getInterpreter(mode,title)```
+4. 使用得到的解释器   
+```
+const exec = require('./spec');
+exec(code,callback);
+```
+
 
 ## API
-
-
 ### TokGen
 ---
 TokGen用于定义一个新的token，使用方法如下：
