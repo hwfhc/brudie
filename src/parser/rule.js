@@ -84,7 +84,7 @@ function isHidden(tok){
 }
 
 function isAstOfRepeat(obj){
-    return obj.__proto__ === Array.prototype;
+    return Array.isArray(obj);
 }
 
 module.exports = function(arg){
