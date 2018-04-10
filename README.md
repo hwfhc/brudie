@@ -1,11 +1,11 @@
-# drypot-interpreter
+# brudie
 ---
 
 ## 介绍
 ---
 这是一个通过设置定义文件自动生成简单解释器的项目。使用JavaScript编写。
 
-以下是一个使用的简单例子： 
+以下是一个使用的简单例子：
 ```
 // index.js
 // 输入为##test，经过处理后结果为<h1>test</h1>
@@ -29,7 +29,7 @@ const {
     ENV
 } = generator;
 
-/* 
+/*
  * token意思为标识符。  
  * 对代码进行词法分析后将生成一个token流，即一个标识符的序列，  
  * 在本例中，当代码为##title时，则将生成一个token流，包含值分别为##与title的两个token（其类型也不相同）

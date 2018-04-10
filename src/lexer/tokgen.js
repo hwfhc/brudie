@@ -82,7 +82,7 @@ function formErrMessage(tokenStream) {
         errMessage += tokenStream.peek(2).value;
     if (tokenStream.peek(3))
         errMessage += tokenStream.peek(3).value;
-
-    return `not match in: ${tokenStream.getIndex()} ${errMessage}`;
+        
+    return `not match in: ${tokenStream.getIndex()} "${errMessage}"}`;
 }
 
