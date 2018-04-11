@@ -19,9 +19,7 @@ function ModeGen(config) {
             this.list = this.rule[state];
         }
 
-        this.isState = function (state) {
-            return this.list === this.rule[state];
-        }
+        this.isState = isState;
 
         // init interface for inter
         if (config.switch)
@@ -31,4 +29,8 @@ function ModeGen(config) {
 
         this.getMatchList = () => { return this.list };
     }
+}
+
+function isState (state) {
+    return this.list === this.rule[state];
 }

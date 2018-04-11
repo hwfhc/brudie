@@ -76,13 +76,15 @@ function isValueEqual(RuleTok, StreamTok) {
 }
 
 function formErrMessage(tokenStream) {
-    var errMessage = tokenStream.peek().value;
+    var errMessage = tokenStream.peek(0).value;
+    errMessage += tokenStream.peek().value;
 
     if (tokenStream.peek(2))
         errMessage += tokenStream.peek(2).value;
     if (tokenStream.peek(3))
         errMessage += tokenStream.peek(3).value;
         
-    return `not match in: ${tokenStream.getIndex()} "${errMessage}"}`;
+    return `not match Error: "${errMessage}"
+    at ${tokenStream.getLine()} : ${tokenStream.getLoc()}`;
 }
 

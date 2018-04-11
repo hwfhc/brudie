@@ -1,4 +1,6 @@
+// line number and location number for debug message
 var line = 1;
+var loc = 1;
 
 class TokenStream {
     constructor(code, mode) {
@@ -16,16 +18,23 @@ class TokenStream {
         this.index++;
 
         var tok = this.stream[this.index];
+        loc++;
 
-        if (tok.value === "\n") line++;
+        if (tok.value === "\n"){
+            line++;
+            loc = 1;
+        }
 
         return tok;
     }
 
 
-    getIndex(){
-        var a = line;
+    getLine(){
         return line;
+    }
+
+    getLoc(){
+        return loc;
     }
 
     isNull() {
@@ -84,6 +93,5 @@ function scan(str,Mode){
 function isError(obj){
     return obj.__proto__ === Error.prototype;
 }
-
 
 module.exports = TokenStream;
