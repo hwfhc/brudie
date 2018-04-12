@@ -1,15 +1,12 @@
 {
   "name": "brudie",
   "version": "1.0.1",
-  "description": "a interpreter\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[ based on js",
+  "description": "a simple interpreter based on nodejs",
   "main": "./src/index.js",
   "scripts": {
     "test": ""
   },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/hwfhc/brudie.git"
-  },
+  "repository": "git+ssh://git@github.com/hwfhc/brudie.git",
   "author": "hwfhc",
   "license": "MIT",
   "bugs": {

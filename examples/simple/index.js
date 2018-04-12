@@ -1,8 +1,11 @@
 const exec = require('./spec')
 
-exec('##test', (err,data) => {
-    if(err)
+async function test(){
+    try{
+        console.log(await exec('##test'));
+    }catch(err){
         console.log(err);
-    else
-        console.log(data);
-});
+    }
+}
+
+test();

@@ -7,23 +7,18 @@ const TokGen = require('./lexer/tokgen');
 const ModeGen = require('./lexer/modegen');
 
 function getInterpreter(mode, grammar) {
+    return code => {
+        return new Promise(async (resolve,reject) => {
+            var ts = new tokenStream(code, mode);
 
-    return async function (code, callback) {
-        var ts = new tokenStream(code, mode);
+            if (isError(ts)) reject(ts);
 
-        if (isError(ts)) {
-            callback(ts);
-            return;
-        }
+            var ast = grammar.match(ts);
 
-        var ast = grammar.match(ts);
+            if (isError(ast)) reject(ast);
 
-        if (isError(ast)) {
-            callback(ast);
-            return;
-        }
-
-        callback(null, await ast.eval());
+            resolve(await ast.eval());
+        })
     }
 
 }
