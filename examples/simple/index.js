@@ -1,6 +1,6 @@
 const exec = require('./spec')
 
-async function test(){
+async function asyncType(){
     try{
         console.log(await exec('##test'));
     }catch(err){
@@ -8,4 +8,13 @@ async function test(){
     }
 }
 
-test();
+function promiseType(){
+    exec('##test').then(
+        data => 
+          console.log(data),
+        err => 
+          console.log(err));
+}
+
+asyncType();
+promiseType();

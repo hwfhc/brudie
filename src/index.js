@@ -6,16 +6,18 @@ const tokenStream = require('./lexer/tokenStream');
 const TokGen = require('./lexer/tokgen');
 const ModeGen = require('./lexer/modegen');
 
-function getInterpreter(mode, grammar) {
+function getInterpreter(mode, grammar,isDebug) {
     return code => {
         return new Promise(async (resolve,reject) => {
             var ts = new tokenStream(code, mode);
 
             if (isError(ts)) reject(ts);
+            if(isDebug) console.log(ts);
 
             var ast = grammar.match(ts);
 
             if (isError(ast)) reject(ast);
+            if(isDebug) console.log(ast);
 
             resolve(await ast.eval());
         })

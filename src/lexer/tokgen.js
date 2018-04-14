@@ -8,6 +8,8 @@ function generator(config) {
     var isStrictEqual = config.isStrictEqual;
     var hidden = config.isHiddenInAST;
 
+    if(!hidden && !evalFunc) throw Error(`token ${type}: isHiddenInAST and eval can not be undefined simultaneously`);
+
     // create prototype of token constructor
     var proto = { eval: evalFunc, MATCH };
 
