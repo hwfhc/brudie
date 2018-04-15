@@ -11,15 +11,23 @@ function getInterpreter(mode, grammar,isDebug) {
         return new Promise(async (resolve,reject) => {
             var ts = new tokenStream(code, mode);
 
-            if (isError(ts)) reject(ts);
-            if(isDebug) console.log(ts);
+            if (isError(ts)) {
+                reject(ts);
+                return;
+            }else if(isDebug) console.log(ts);
 
             var ast = grammar.match(ts);
 
-            if (isError(ast)) reject(ast);
-            if(isDebug) console.log(ast);
+            if (isError(ast)){
+                 reject(ast);
+                 return;
+            }else if(isDebug) console.log(ast);
 
-            resolve(await ast.eval());
+            try {
+                resolve(await ast.eval());
+            }catch(err){
+                reject(err);
+            }
         })
     }
 

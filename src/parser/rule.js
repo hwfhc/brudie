@@ -49,23 +49,26 @@ class Rule{
     }
 
     match(tokenStream){
-        var list = this.list;
-        var ast = new AST(this.tag,this.eval);
-
-        for (var i = 0; i < list.length; i++) {
-            var item = list[i];
-
-            var result = item.match(tokenStream);
-
-            if (isError(result))
-                return result;
-
-            addChildWithoutHidden(ast, result);
-        }
-
-        return ast;
+        return matchGrammarRule(this.tag,this.eval,this.list,tokenStream);
     }
 
+}
+
+function matchGrammarRule(tag, eval, list, tokenStream) {
+    var ast = new AST(tag, eval);
+
+    for (var i = 0, len = list.length; i < len; i++) {
+        var item = list[i];
+
+        var result = item.match(tokenStream);
+
+        if (isError(result))
+            return result;
+
+        ast = addChildWithoutHidden(ast, result);
+    }
+
+    return ast;
 }
 
 function addChildWithoutHidden(ast, newAst) {
@@ -73,6 +76,8 @@ function addChildWithoutHidden(ast, newAst) {
         newAst.forEach(item => { if (!isHidden(item)) ast.addChild(item) });
     else if (!isHidden(newAst))
         ast.addChild(newAst);
+    
+    return ast;
 }
 
 function isError(obj) {

@@ -57,40 +57,36 @@ class TokenStream {
     }
 }
 
-function scan(str,Mode){
+function scan(str, Mode) {
     var stream = [];
     var mode = new Mode();
 
-    while(str.length > 0){
-        var result = getOneToken();
+    while (str.length > 0) {
+        var { tok, str } = getOneToken(str, mode);
 
-        if(!result){
-            return new Error(`Unexpected token \'${str.replace('\n','\\n')}\'`);
-        }
+        if (!tok)
+            return new Error(`Unexpected token \'${str.replace('\n', '\\n')}\'`);
 
-        stream.push(result);
+        stream.push(tok);
     }
 
     return stream;
-
-    function getOneToken(){
-        for(var i=0;i<mode.getMatchList().length;i++){
-            var item = mode.getMatchList()[i];
-            var result = str.match(item.MATCH);
-
-            if(!result)
-                continue;
-
-            mode.switchMatchList(result[0]);
-
-            str = str.substr(result[0].length);
-            return new item(result[0]);
-        }
-    }
-
 }
 
-function isError(obj){
+function getOneToken(str,mode) {
+    for (var i = 0; i < mode.getMatchList().length; i++) {
+        var item = mode.getMatchList()[i];
+        var {str,tokStr} = item.MATCH(str);
+
+        if (!tokStr)
+            continue;
+
+        mode.switchMatchList(tokStr);
+        return { tok: new item(tokStr), str };
+    }
+}
+
+function isError(obj) {
     return obj.__proto__ === Error.prototype;
 }
 

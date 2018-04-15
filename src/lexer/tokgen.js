@@ -2,12 +2,13 @@ module.exports = generator;
 
 function generator(config) {
     // read properties of config
-    var MATCH = config.MATCH;
-    var type = config.type;
-    var evalFunc = config.eval;
-    var isStrictEqual = config.isStrictEqual;
-    var hidden = config.isHiddenInAST;
+    const MATCH = config.MATCH;
+    const type = config.type;
+    const evalFunc = config.eval;
+    const isStrictEqual = config.isStrictEqual;
+    const hidden = config.isHiddenInAST;
 
+    if(!MATCH) throw Error(`token ${type}: MATCH can not be undefined`);
     if(!hidden && !evalFunc) throw Error(`token ${type}: isHiddenInAST and eval can not be undefined simultaneously`);
 
     // create prototype of token constructor
@@ -27,8 +28,16 @@ function generator(config) {
     }
 
     // add properties of constructor
-    tok.MATCH = MATCH;
-    tok.match = isStrictEqual? matchValueEqual : matchTokTypeEqual;
+    tok.MATCH = function (str) {
+        var result = str.match(MATCH);
+        if (!result) return { str, tokStr: false };
+
+        str = str.substr(result.length);
+        // return the string of token
+        return { str, tokStr: result[0] };
+
+    };
+    tok.match = isStrictEqual ? matchValueEqual : matchTokTypeEqual;
     proto.match = tok.match;
 
     // set prototype
@@ -78,7 +87,9 @@ function isValueEqual(RuleTok, StreamTok) {
 }
 
 function formErrMessage(tokenStream) {
-    var errMessage = tokenStream.peek(0).value;
+    if (tokenStream.peek(0))
+        var errMessage = tokenStream.peek(0).value;
+
     errMessage += tokenStream.peek().value;
 
     if (tokenStream.peek(2))
@@ -86,7 +97,7 @@ function formErrMessage(tokenStream) {
     if (tokenStream.peek(3))
         errMessage += tokenStream.peek(3).value;
         
-    return `not match Error: "${errMessage}"
+    return `not match Error: "${errMessage.replace('\n', '\\n')}"
     at ${tokenStream.getLine()} : ${tokenStream.getLoc()}`;
 }
 
