@@ -35,4 +35,4 @@ var title = rule('title').add(punc('##')).add(str).setEval(
 );
 
 
-module.exports = getInterpreter(mode,title,true);
+module.exports = getInterpreter(mode,title);

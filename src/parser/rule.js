@@ -13,6 +13,10 @@ class Rule{
     }
 
     add(item){
+        if(!item) throw Error(`argument of rule's add function can not be undefined`);
+        if(!item._isTok()) throw Error(`argument of rule's add function must be a token`);
+        if(item._isHidden() && item._isValueNull()) throw Error(`token's value, which hides in ast, can not be null`);
+
         this.list.push(item);
 
         return this;

@@ -8,11 +8,22 @@ function generator(config) {
     const isStrictEqual = config.isStrictEqual;
     const hidden = config.isHiddenInAST;
 
-    if(!MATCH) throw Error(`token ${type}: MATCH can not be undefined`);
-    if(!hidden && !evalFunc) throw Error(`token ${type}: isHiddenInAST and eval can not be undefined simultaneously`);
+    if (!MATCH) throw Error(`token ${type}: MATCH can not be undefined`);
+    if (!type) throw Error(`token ${type}: type can not be undefined`);
+    if (!hidden && !evalFunc) throw Error(`token ${type}: isHiddenInAST and eval can not be undefined simultaneously`);
 
     // create prototype of token constructor
-    var proto = { eval: evalFunc, MATCH };
+    var proto = {
+        _isHidden: function () {
+            if (hidden)
+                return true;
+            else
+                return false;
+        },
+        _isValueNull: isValueNull,
+        _isTok: isTok,
+        eval: evalFunc
+    };
 
     // create token constructor
     var tok = function (value) {
@@ -47,10 +58,22 @@ function generator(config) {
     return tok;
 }
 
+function isTok(){
+    return true;
+}
+
+function isValueNull() {
+    if (!this) throw Error('this is miss');
+    if (this.value === undefined)
+        return true;
+    else
+        return false;
+}
+
 function matchTokTypeEqual(tokenStream) {
     var tok = tokenStream.peek();
 
-    if(!tok)
+    if (!tok)
         return new Error(`no tok in tokenStream`);
 
     if (isSameToken(this, tok)) {
