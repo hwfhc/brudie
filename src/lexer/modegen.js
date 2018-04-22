@@ -1,8 +1,16 @@
+const FSM = require('./fsm');
+
 module.exports = ModeGen;
 
 function ModeGen(config) {
     return function () {
-        // the array of all match list
+        let fsm = new FSM(config);
+        this.getMatchList = () => { return fsm.getTokens() };
+
+        this.update = token => { fsm.update(token) };
+        this.isState = isState;
+
+        /*// the array of all match list
         this.rule = config.rule;
 
         // the current match list
@@ -11,23 +19,13 @@ function ModeGen(config) {
 
         this.list = this.rule.default;
 
-        // init interface for user 
-        this.switch = function (state) {
-            if (this.rule[state] === undefined)
-                throw new Error(`Switch to a illegal state: to ${state}`);
-
-            this.list = this.rule[state];
-        }
-
-        this.isState = isState;
-
         // init interface for inter
         if (config.switch)
             this.switchMatchList = config.switch;
         else
             this.switchMatchList = () => { };
 
-        this.getMatchList = () => { return this.list };
+        this.getMatchList = () => { return this.list };*/
     }
 }
 

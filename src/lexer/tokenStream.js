@@ -81,7 +81,7 @@ function getOneToken(str,mode) {
         if (!tokStr)
             continue;
 
-        mode.switchMatchList(tokStr);
+        mode.update(tokStr);
         return { tok: new item(tokStr), str };
     }
 }

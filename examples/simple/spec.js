@@ -21,11 +21,29 @@ const str = new TokGen({
     }
 });
 
-const mode = new ModeGen({
-    rule: {
-        default: [punc, str]
+/*const mode = new ModeGen([
+    {
+        name: 'default',
+        tokens: [punc, str, quo],
+        transmit: [
+            { token: '\`\`\`', target: 'inCode' }
+        ]
+    },
+    {
+        name: 'inCode',
+        tokens: [quo, html],
+        transmit: [
+            { token: '\`\`\`', target: 'default' }
+        ]
     }
-});
+]);*/
+const mode = new ModeGen([
+    {
+        name: 'default',
+        tokens: [punc, str],
+        transmit: []
+    }
+]);
 
 // title : ## str
 var title = rule('title').add(punc('##')).add(str).setEval(

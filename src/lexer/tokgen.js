@@ -21,7 +21,7 @@ function generator(config) {
                 return false;
         },
         _isValueNull: isValueNull,
-        _isTok: isTok,
+        _isTok: true,
         eval: evalFunc
     };
 
@@ -43,7 +43,7 @@ function generator(config) {
         var result = str.match(MATCH);
         if (!result) return { str, tokStr: false };
 
-        str = str.substr(result.length);
+        str = str.substr(result[0].length);
         // return the string of token
         return { str, tokStr: result[0] };
 
@@ -56,10 +56,6 @@ function generator(config) {
     tok.__proto__ = proto;
 
     return tok;
-}
-
-function isTok(){
-    return true;
 }
 
 function isValueNull() {

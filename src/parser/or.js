@@ -29,16 +29,18 @@ function isError(obj) {
 }
 
 function formErrMessage(tokenStream) {
-    var errMessage = '';
+    if (tokenStream.peek(0))
+        var errMessage = tokenStream.peek(0).value;
 
-    if (tokenStream.peek())
-        errMessage += tokenStream.peek().value;
+    errMessage += tokenStream.peek().value;
+
     if (tokenStream.peek(2))
         errMessage += tokenStream.peek(2).value;
     if (tokenStream.peek(3))
         errMessage += tokenStream.peek(3).value;
-
-    return `not match in: ${tokenStream.getIndex()} ${errMessage}`;
+        
+    return `not match Error: "${errMessage.replace('\n', '\\n')}"
+    at ${tokenStream.getLine()} : ${tokenStream.getLoc()}`;
 }
 
 module.exports = Or;

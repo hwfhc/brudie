@@ -7,9 +7,12 @@ adf\`\`\`
 + zdsf**eaf**eff
 `;
 
-exec(str, (err, data) => {
-    if (err)
+async function demo(){
+    try{
+        console.log(await exec(str));
+    }catch(err){
         console.log(err);
-    else
-        console.log(data);
-});
+    }
+}
+
+demo();

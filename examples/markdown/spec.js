@@ -38,20 +38,22 @@ const html = new TokGen({
     }
 });
 
-const mode = new ModeGen({
-    switch: function (token) {
-        if (token === '\`\`\`') {
-            if (this.isState("default"))
-                this.switch("inCode");
-            else
-                this.switch("default");
-        }
+const mode = new ModeGen([
+    {
+        name: 'default',
+        tokens: [punc, str, quo],
+        transmit: [
+            { token: '\`\`\`', target: 'inCode' }
+        ]
     },
-    rule: {
-        default: [punc, str, quo],
-        inCode: [quo, html]
+    {
+        name: 'inCode',
+        tokens: [quo, html],
+        transmit: [
+            { token: '\`\`\`', target: 'default' }
+        ]
     }
-});
+]);
 
 /* 
  * inline

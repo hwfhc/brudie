@@ -17,4 +17,3 @@ function promiseType(){
 }
 
 asyncType();
-promiseType();
