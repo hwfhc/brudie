@@ -1,3 +1,5 @@
+const isError = require('iserror');
+
 class Or{
     constructor(branch){
         /*
@@ -22,10 +24,6 @@ class Or{
 
         return new Error(formErrMessage(tokenStream));
     }
-}
-
-function isError(obj) {
-    return obj.__proto__ === Error.prototype;
 }
 
 function formErrMessage(tokenStream) {

@@ -1,3 +1,5 @@
+const isError = require('iserror');
+
 // line number and location number for debug message
 var line = 1;
 var loc = 1;
@@ -84,10 +86,6 @@ function getOneToken(str,mode) {
         mode.update(tokStr);
         return { tok: new item(tokStr), str };
     }
-}
-
-function isError(obj) {
-    return obj.__proto__ === Error.prototype;
 }
 
 module.exports = TokenStream;

@@ -21,22 +21,6 @@ const str = new TokGen({
     }
 });
 
-/*const mode = new ModeGen([
-    {
-        name: 'default',
-        tokens: [punc, str, quo],
-        transmit: [
-            { token: '\`\`\`', target: 'inCode' }
-        ]
-    },
-    {
-        name: 'inCode',
-        tokens: [quo, html],
-        transmit: [
-            { token: '\`\`\`', target: 'default' }
-        ]
-    }
-]);*/
 const mode = new ModeGen([
     {
         name: 'default',

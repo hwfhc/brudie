@@ -1,3 +1,5 @@
+const isError = require('iserror');
+
 const ENV = require('./env');
 
 const rule = require('./parser/rule');
@@ -31,10 +33,6 @@ function getInterpreter(mode, grammar,isDebug) {
         })
     }
 
-}
-
-function isError(obj) {
-    return obj.__proto__ === Error.prototype;
 }
 
 module.exports = {

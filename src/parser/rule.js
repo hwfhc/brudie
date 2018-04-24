@@ -4,6 +4,8 @@ const All = require('./all');
 const Maybe = require('./maybe');
 const Or = require('./or');
 
+const isError = require('iserror');
+
 class Rule{
     constructor(type){
         this.type = type;
@@ -86,10 +88,6 @@ function addChildWithoutHidden(ast, newAst) {
         ast.addChild(newAst);
     
     return ast;
-}
-
-function isError(obj) {
-    return obj.__proto__ === Error.prototype;
 }
 
 function isHidden(tok){

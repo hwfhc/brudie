@@ -13,6 +13,8 @@
     "url": "https://github.com/hwfhc/brudie/issues"
   },
   "homepage": "https://github.com/hwfhc/brudie#readme",
-  "dependencies": {},
+  "dependencies": {
+    "iserror": "^0.0.2"
+  },
   "devDependencies": {}
 }

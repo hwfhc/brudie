@@ -1,3 +1,5 @@
+const isError = require('iserror');
+
 class Maybe{
     /*
      * match one time
@@ -41,10 +43,6 @@ function matchOnce(list,tokenStream){
 function insertAtLastOfArr(main,arr){
     for(var i=0;i<arr.length;i++)
         main.push(arr[i]);
-}
-
-function isError(obj){
-    return obj.__proto__ === Error.prototype;
 }
 
 module.exports = Maybe;

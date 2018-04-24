@@ -9,23 +9,6 @@ function ModeGen(config) {
 
         this.update = token => { fsm.update(token) };
         this.isState = isState;
-
-        /*// the array of all match list
-        this.rule = config.rule;
-
-        // the current match list
-        if (this.rule.default === undefined)
-            throw new Error("Not set default rule of token match mode!");
-
-        this.list = this.rule.default;
-
-        // init interface for inter
-        if (config.switch)
-            this.switchMatchList = config.switch;
-        else
-            this.switchMatchList = () => { };
-
-        this.getMatchList = () => { return this.list };*/
     }
 }
 
