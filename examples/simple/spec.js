@@ -24,8 +24,7 @@ const str = new TokGen({
 const mode = new ModeGen([
     {
         name: 'default',
-        tokens: [punc, str],
-        transmit: []
+        tokens: [punc, str]
     }
 ]);
 

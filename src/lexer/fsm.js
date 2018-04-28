@@ -12,7 +12,7 @@ class FSM{
             let tokens = [...state.tokens];
             let symbol = symbols[state.name];
 
-            let rule = state.transmit.map(item => {
+            let rule = state.mutations.map(item => {
                 let { token, target } = item;
 
                 return {
