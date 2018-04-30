@@ -42,14 +42,14 @@ const mode = new ModeGen([
     {
         name: 'default',
         tokens: [punc, str, quo],
-        transmit: [
+        mutations: [
             { token: '\`\`\`', target: 'inCode' }
         ]
     },
     {
         name: 'inCode',
         tokens: [quo, html],
-        transmit: [
+        mutations: [
             { token: '\`\`\`', target: 'default' }
         ]
     }
