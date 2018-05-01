@@ -5,7 +5,7 @@ const ENV = require('./env');
 const rule = require('./parser/rule');
 
 const tokenStream = require('./lexer/tokenStream');
-const TokGen = require('./lexer/tokgen');
+const Token = require('./lexer/token');
 const ModeGen = require('./lexer/modegen');
 
 function getInterpreter(mode, grammar,isDebug) {
@@ -36,5 +36,5 @@ function getInterpreter(mode, grammar,isDebug) {
 }
 
 module.exports = {
-    ENV, rule, TokGen, ModeGen, getInterpreter
+    ENV, rule, Token, ModeGen, getInterpreter
 }

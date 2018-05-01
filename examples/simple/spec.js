@@ -1,19 +1,19 @@
 const generator = require('../../src/index');
 const {
-    TokGen,
+    Token,
     ModeGen,
     rule,
     getInterpreter,
     ENV
 } = generator;
 
-const punc = new TokGen({
+const punc = new Token({
     MATCH: /^(##)/,
     type: 'punc',
     isStrictEqual: true,
     isHiddenInAST: true
 });
-const str = new TokGen({
+const str = new Token({
     MATCH: /^[a-zA-Z_]+/,
     type: 'ident',
     eval: function () {
