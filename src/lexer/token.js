@@ -36,7 +36,7 @@ function generator(config) {
         obj.__proto__ = proto;
 
         return obj;
-    }
+    };
 
     // add properties of constructor
     tok.MATCH = function (str) {
@@ -70,7 +70,7 @@ function matchTokTypeEqual(tokenStream) {
     var tok = tokenStream.peek();
 
     if (!tok)
-        return new Error(`no tok in tokenStream`);
+        return new Error('no tok in tokenStream');
 
     if (isSameToken(this, tok)) {
         tokenStream.next();
@@ -84,7 +84,7 @@ function matchValueEqual(tokenStream) {
     var tok = tokenStream.peek();
 
     if(!tok)
-        return new Error(`no tok in tokenStream`);
+        return new Error('no tok in tokenStream');
 
     if (isValueEqual(this, tok)) {
         tokenStream.next();

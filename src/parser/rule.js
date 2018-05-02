@@ -17,7 +17,7 @@ class Rule{
     }
 
     add(item){
-        if (!item) throw Error(`argument of rule's add function can not be undefined`);
+        if (!item) throw Error('argument of rule\'s add function can not be undefined');
         if (!item._isRule) {
             if (!item._isTok) throw Error(`${item.type}: argument of rule's add function must be a token or a rule`);
             if (item._isHidden() && item._isValueNull()) throw Error(`${item.type}: token's value, which hides in ast, can not be null`);
@@ -64,8 +64,8 @@ class Rule{
 
 }
 
-function matchGrammarRule(type, eval, list, tokenStream) {
-    var ast = new AST(type, eval);
+function matchGrammarRule(type, evalucation, list, tokenStream) {
+    var ast = new AST(type, evalucation);
 
     for (var i = 0, len = list.length; i < len; i++) {
         var item = list[i];
@@ -83,7 +83,7 @@ function matchGrammarRule(type, eval, list, tokenStream) {
 
 function addChildWithoutHidden(ast, newAst) {
     if (isAstOfRepeat(newAst))
-        newAst.forEach(item => { if (!isHidden(item)) ast.addChild(item) });
+        newAst.forEach(item => { if (!isHidden(item)) ast.addChild(item); });
     else if (!isHidden(newAst))
         ast.addChild(newAst);
     
@@ -100,4 +100,4 @@ function isAstOfRepeat(obj){
 
 module.exports = function(arg){
     return new Rule(arg);
-}
+};

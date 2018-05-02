@@ -22,7 +22,7 @@ class TokenStream {
         var tok = this.stream[this.index];
         loc++;
 
-        if (tok.value === "\n"){
+        if (tok.value === '\n'){
             line++;
             loc = 1;
         }
@@ -44,14 +44,14 @@ class TokenStream {
     }
 
 
-    peek(i=1){
-      return this.stream[this.index+i];
+    peek(i = 1) {
+        return this.stream[this.index + i];
     }
 
     createRollbackPoint(){
         return {
             index: this.index
-        }
+        };
     }
 
     rollback(point){
@@ -61,13 +61,15 @@ class TokenStream {
 
 function scan(str, Mode) {
     var stream = [];
-    var mode = new Mode();
+    let mode = new Mode();
 
     while (str.length > 0) {
-        var { tok, str } = getOneToken(str, mode);
+        let tem = getOneToken(str, mode);
+        let tok = tem.tok;
+        str = tem.str;
 
         if (!tok)
-            return new Error(`Unexpected token \'${str.replace('\n', '\\n')}\'`);
+            return new Error(`Unexpected token '${str.replace('\n', '\\n')}'`);
 
         stream.push(tok);
     }
@@ -78,7 +80,10 @@ function scan(str, Mode) {
 function getOneToken(str,mode) {
     for (var i = 0; i < mode.getMatchList().length; i++) {
         var item = mode.getMatchList()[i];
-        var {str,tokStr} = item.MATCH(str);
+
+        var tem = item.MATCH(str);
+        var tokStr = tem.tokStr;
+        str = tem.str;
 
         if (!tokStr)
             continue;

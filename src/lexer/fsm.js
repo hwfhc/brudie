@@ -1,6 +1,6 @@
 class FSM{
     constructor(graph){
-        let symbols = []
+        let symbols = [];
 
         this.machine = {};
 
@@ -13,7 +13,7 @@ class FSM{
             let symbol = symbols[state.name];
 
             let rule = state.mutations.map(item => {
-                let { token, target } = item;
+                let { token } = item;
 
                 return {
                     token,

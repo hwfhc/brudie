@@ -16,25 +16,25 @@ function getInterpreter(mode, grammar,isDebug) {
             if (isError(ts)) {
                 reject(ts);
                 return;
-            }else if(isDebug) console.log(ts);
+            } else if (isDebug) throw ts;
 
             var ast = grammar.match(ts);
 
-            if (isError(ast)){
-                 reject(ast);
-                 return;
-            }else if(isDebug) console.log(ast);
+            if (isError(ast)) {
+                reject(ast);
+                return;
+            }else if(isDebug) throw ast;
 
             try {
                 resolve(await ast.eval());
             }catch(err){
                 reject(err);
             }
-        })
-    }
+        });
+    };
 
 }
 
 module.exports = {
     ENV, rule, Token, ModeGen, getInterpreter
-}
+};

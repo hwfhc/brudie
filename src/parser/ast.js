@@ -15,7 +15,7 @@ class AST{
     }
 
     getChildren(){
-        return this.children
+        return this.children;
     }
 
     getFirstChild(){

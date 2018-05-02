@@ -1,4 +1,3 @@
-"use strict";
 module.exports = {
     set,
     get
@@ -11,7 +10,7 @@ const scope = {
     getPathname: function (number, callback) {
         callback(window.location.pathname.split('/')[number]);
     }
-}
+};
 
 function set(ident, value) {
     if (isArray(ident)) {
@@ -20,7 +19,7 @@ function set(ident, value) {
         if (!tem) return formErr();
 
         for (var i = 1; i < ident.length - 1; i++) {
-            var tem = tem[ident[i]];
+            tem = tem[ident[i]];
 
             if (!tem) return formErr();
         }
@@ -39,14 +38,14 @@ function get(ident) {
         if (!tem) return formErr();
 
         for (var i = 1; i < ident.length; i++) {
-            var tem = tem[ident[i]];
+            tem = tem[ident[i]];
 
             if (!tem) return formErr();
         }
 
     }
     else {
-        var tem = scope[ident];
+        tem = scope[ident];
 
         if (!tem) return formErr();
     }
@@ -56,7 +55,7 @@ function get(ident) {
 
 
 function sendReq(url){
-    return new Promise((resolve,reject) => {
+    return new Promise( resolve => {
 
         var xmlhttp = new XMLHttpRequest();
 
@@ -66,9 +65,9 @@ function sendReq(url){
             {
                 resolve(xmlhttp.responseText);
             }
-        }
+        };
 
-        xmlhttp.open("GET",url,true);
+        xmlhttp.open('GET',url,true);
         xmlhttp.send();
     });
 }
@@ -86,7 +85,8 @@ function getLast(arr) {
 
 function formErr(ident) {
     if (isArray(ident)) {
-        var str = ident[0];
+        let str = ident[0];
+        let i = ident.length; // here is a bug
 
         for (var j = i; j < i; j++)
             str += `.${ident[j]}`;
@@ -95,4 +95,4 @@ function formErr(ident) {
     }
     else
         return new Error(`variable is undefiend : ${ident}`);
-    }
+}

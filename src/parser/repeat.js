@@ -12,7 +12,7 @@ class Repeat{
     match(tokenStream){
         var astArr = [];
 
-        while(1){
+        while(!tokenStream.isNull()){
             var result = matchOnce(this.list,tokenStream);
 
             if (result)
