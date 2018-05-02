@@ -8,7 +8,8 @@
     "lint": "./node_modules/.bin/eslint src test"
   },
   "pre-commit": [
-    "lint"
+    "lint",
+    "test"
   ],
   "repository": "git+ssh://git@github.com/hwfhc/brudie.git",
   "author": "hwfhc",
@@ -23,6 +24,7 @@
   "devDependencies": {
     "chai": "^4.1.2",
     "eslint": "^4.19.1",
-    "mocha": "^5.1.1"
+    "mocha": "^5.1.1",
+    "pre-commit": "^1.2.2"
   }
 }
