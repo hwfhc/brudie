@@ -8,13 +8,17 @@ const {
 } = generator;
 
 const punc = new Token({
-    MATCH: /^(##)/,
+    MATCH: [
+        '##'
+    ],
     type: 'punc',
     isStrictEqual: true,
     isHiddenInAST: true
 });
 const str = new Token({
-    MATCH: /^[a-zA-Z_]+/,
+    MATCH: [
+        '[a-zA-Z_]+'
+    ],
     type: 'ident',
     eval: function () {
         return this.value;

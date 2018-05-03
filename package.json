@@ -5,7 +5,7 @@
   "main": "./src/index.js",
   "scripts": {
     "test": "mocha",
-    "lint": "./node_modules/.bin/eslint src test"
+    "lint": "./node_modules/.bin/eslint --fix src test"
   },
   "pre-commit": [
     "lint",

@@ -2,13 +2,17 @@ module.exports = generator;
 
 function generator(config) {
     // read properties of config
-    const MATCH = config.MATCH;
+    if (!config.MATCH)
+        throw Error(`token ${config.type}: MATCH can not be null`);
+    if (!Array.isArray(config.MATCH) || config.MATCH.length === 0)
+        throw Error(`token ${config.type}: MATCH must be a array`);
+
+    const MATCH = getRegExp(config.MATCH);
     const type = config.type;
     const evalFunc = config.eval;
     const isStrictEqual = config.isStrictEqual;
     const hidden = config.isHiddenInAST;
 
-    if (!MATCH) throw Error(`token ${type}: MATCH can not be undefined`);
     if (!type) throw Error(`token ${type}: type can not be undefined`);
     if (!hidden && !evalFunc) throw Error(`token ${type}: isHiddenInAST and eval can not be undefined simultaneously`);
 
@@ -56,6 +60,18 @@ function generator(config) {
     tok.__proto__ = proto;
 
     return tok;
+}
+
+function getRegExp(arr) {
+    let str = '^';
+
+    for (let i = 0; i < arr.length-1; i++){
+        str += `(${arr[i]})|`;
+    }
+
+    str += `(${arr[arr.length-1]})`;
+
+    return new RegExp(str);
 }
 
 function isValueNull() {
@@ -119,4 +135,5 @@ function formErrMessage(tokenStream) {
     return `not match Error: "${errMessage.replace('\n', '\\n')}"
     at ${tokenStream.getLine()} : ${tokenStream.getLoc()}`;
 }
+
 
