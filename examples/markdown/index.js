@@ -1,7 +1,7 @@
 const exec = require('./spec')
 
 var str = `## adfas
-heiheihei**wawa**\`\`\`$%heihei哇   
+heiheihei**wawa**\`\`\`$%heihei哇
 adf\`\`\`
 + **asdf**
 + zdsf**eaf**eff

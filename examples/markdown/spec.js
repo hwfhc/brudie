@@ -1,37 +1,40 @@
 const generator = require('../../src/index');
 const {
-    TokGen,
+    Token,
     ModeGen,
     rule,
-    getInterpreter,
-    ENV
+    getInterpreter
 } = generator;
 
 /*
  * token
  */
 
-const punc = new TokGen({
-    MATCH: /^((##)|(\*\*)|(\+)|\s|\n)/,
+const punc = new Token({
+    MATCH: [
+        '##','\\*\\*','\\+','\\s','\\n'
+    ],
     type: 'punc',
     isStrictEqual: true,
     isHiddenInAST: true
 });
-const quo = new TokGen({
-    MATCH: /^(\`\`\`)/,
+const quo = new Token({
+    MATCH: [
+        '```'
+    ],
     type: 'quo',
     isStrictEqual: true,
     isHiddenInAST: true
 });
-const str = new TokGen({
-    MATCH: /^[a-zA-Z_]+/,
+const str = new Token({
+    MATCH: '[a-zA-Z_]',
     type: 'str',
     eval: function () {
         return this.value;
     }
 });
-const html = new TokGen({
-    MATCH: /^[^(\`\`\`)]+/,
+const html = new Token({
+    MATCH: '[^(```)]',
     type: 'html',
     eval: function () {
         return this.value;
@@ -43,14 +46,14 @@ const mode = new ModeGen([
         name: 'default',
         tokens: [punc, str, quo],
         mutations: [
-            { token: '\`\`\`', target: 'inCode' }
+            { token: '```', target: 'inCode' }
         ]
     },
     {
         name: 'inCode',
         tokens: [quo, html],
         mutations: [
-            { token: '\`\`\`', target: 'default' }
+            { token: '```', target: 'default' }
         ]
     }
 ]);
@@ -65,9 +68,9 @@ var black = rule('black').add(punc('**')).add(str).add(punc('**')).setEval(
     }
 );
 
-var code = rule('code').add(punc('\`\`\`')).add(html).add(punc('\`\`\`')).setEval(
+var code = rule('code').add(punc('```')).add(html).add(punc('```')).setEval(
     function () {
-        return `<code>${this.getFirstChild().eval()}</code>`
+        return `<code>${this.getFirstChild().eval()}</code>`;
     }
 );
 

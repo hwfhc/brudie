@@ -4,8 +4,6 @@ function generator(config) {
     // read properties of config
     if (!config.MATCH)
         throw Error(`token ${config.type}: MATCH can not be null`);
-    if (!Array.isArray(config.MATCH) || config.MATCH.length === 0)
-        throw Error(`token ${config.type}: MATCH must be a array`);
 
     const MATCH = getRegExp(config.MATCH);
     const type = config.type;
@@ -62,16 +60,39 @@ function generator(config) {
     return tok;
 }
 
-function getRegExp(arr) {
-    let str = '^';
+function getRegExp(exp) {
+    if(Array.isArray(exp))
+        return getRegExpFromArr(exp);
+    else
+        return getRegExpFromStr(exp);
 
-    for (let i = 0; i < arr.length-1; i++){
-        str += `(${arr[i]})|`;
+
+    function getRegExpFromStr(exp) {
+        return new RegExp(`^${exp}+`);
     }
 
-    str += `(${arr[arr.length-1]})`;
+    function getRegExpFromArr(arr) {
+        if (arr.length === 0)
+            throw Error('length of MATCH arr can not be 0');
 
-    return new RegExp(str);
+        let str = '^(';
+        let index = arr.length;
+
+        (function dispatch(i) {
+            if (i >= index) return;
+
+            if (i < index - 1)
+                str += `(${arr[i]})|`;
+            else
+                str += `(${arr[i]})`;
+
+            dispatch(i + 1);
+        })(0);
+
+        str += ')';
+
+        return new RegExp(str);
+    }
 }
 
 function isValueNull() {

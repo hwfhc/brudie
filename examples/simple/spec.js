@@ -3,8 +3,7 @@ const {
     Token,
     ModeGen,
     rule,
-    getInterpreter,
-    ENV
+    getInterpreter
 } = generator;
 
 const punc = new Token({
@@ -16,9 +15,7 @@ const punc = new Token({
     isHiddenInAST: true
 });
 const str = new Token({
-    MATCH: [
-        '[a-zA-Z_]+'
-    ],
+    MATCH: '[a-zA-Z_]',
     type: 'ident',
     eval: function () {
         return this.value;
