@@ -1,8 +1,8 @@
 ## 目录
-+ [getInterpreger](#getInterpreger)
-+ [Token](#Token)
-+ [ModeGen](#ModeGen)
-+ [Rule](#Rule)
++ [getInterpreger](#getinterpreger)
++ [Token](#token)
++ [ModeGen](#modegen)
++ [Rule](#rule)
 
 ## getInterpreger
 传入mode和最顶层语法规则，返回生成最终的解释器。
