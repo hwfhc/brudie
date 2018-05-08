@@ -2,7 +2,7 @@ const generator = require('../../src/index');
 const {
     Token,
     ModeGen,
-    rule,
+    Rule,
     getInterpreter
 } = generator;
 
@@ -30,7 +30,7 @@ const mode = new ModeGen([
 ]);
 
 // title : ## str
-var title = rule('title').add(punc('##')).add(str).setEval(
+var title = Rule('title').add(punc('##')).add(str).setEval(
     function () {
         return `<h1>${this.getFirstChild().eval()}</h1>`;
     }

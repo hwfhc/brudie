@@ -2,7 +2,7 @@ const generator = require('../../src/index');
 const {
     Token,
     ModeGen,
-    rule,
+    Rule,
     getInterpreter
 } = generator;
 
@@ -62,19 +62,19 @@ const mode = new ModeGen([
  * inline
  */
  
-var black = rule('black').add(punc('**')).add(str).add(punc('**')).setEval(
+var black = Rule('black').add(punc('**')).add(str).add(punc('**')).setEval(
     function () {
         return `<b>${this.getFirstChild().eval()}</b>`;
     }
 );
 
-var code = rule('code').add(punc('```')).add(html).add(punc('```')).setEval(
+var code = Rule('code').add(punc('```')).add(html).add(punc('```')).setEval(
     function () {
         return `<code>${this.getFirstChild().eval()}</code>`;
     }
 );
 
-var inline = rule('inline').or(black, code, str).setEval(
+var inline = Rule('inline').or(black, code, str).setEval(
     function () {
         return `${this.getFirstChild().eval()}`;
     }
@@ -87,13 +87,13 @@ var inline = rule('inline').or(black, code, str).setEval(
  */
 
 // title : ## str
-var title = rule('title').add(punc('##')).add(punc(' ')).add(str).add(punc('\n')).setEval(
+var title = Rule('title').add(punc('##')).add(punc(' ')).add(str).add(punc('\n')).setEval(
     function () {
         return `<h1>${this.getFirstChild().eval()}</h1>`;
     }
 );
 
-var para = rule('para').repeat(inline).add(punc('\n')).setEval(
+var para = Rule('para').repeat(inline).add(punc('\n')).setEval(
     function () {
         var str = '';
         var arr = this.getChildren();
@@ -106,7 +106,7 @@ var para = rule('para').repeat(inline).add(punc('\n')).setEval(
     }
 );
 
-var item = rule('item').add(punc('+')).add(punc(' ')).repeat(inline).setEval(
+var item = Rule('item').add(punc('+')).add(punc(' ')).repeat(inline).setEval(
     function () {
         var str = '';
         var arr = this.getChildren();
@@ -119,7 +119,7 @@ var item = rule('item').add(punc('+')).add(punc(' ')).repeat(inline).setEval(
     }
 );
 
-var list = rule('list').add(item).add(punc('\n')).repeat(item, punc('\n')).setEval(
+var list = Rule('list').add(item).add(punc('\n')).repeat(item, punc('\n')).setEval(
     function () {
         var str = '';
         var arr = this.getChildren();
@@ -132,13 +132,13 @@ var list = rule('list').add(item).add(punc('\n')).repeat(item, punc('\n')).setEv
     }
 );
 
-var stmt = rule('stmt').or(list,title,para).setEval(
+var stmt = Rule('stmt').or(list,title,para).setEval(
     function () {
         return `${this.getFirstChild().eval()}`;
     }
 );
 
-var text = rule('text').all(stmt).setEval(
+var text = Rule('text').all(stmt).setEval(
     function () {
         var str = '';
         var arr = this.getChildren();

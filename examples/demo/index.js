@@ -1,8 +1,8 @@
-const brudie = require('brudie');
-const { TokGen, ModeGen, rule, getInterpreter, ENV } = brudie;
+const brudie = require('../../src/index.js');
+const { Token, ModeGen, Rule, getInterpreter } = brudie;
 
-const str = new TokGen({
-    MATCH: /^[a-zA-Z_]+/,
+const str = new Token({
+    MATCH: '[a-zA-Z_]',
     type: 'ident',
     eval: function () {
         return this.value;
@@ -17,7 +17,7 @@ const mode = new ModeGen([
     }
 ]);
 
-var title = rule('title').add(str).setEval(
+var title = Rule('title').add(str).setEval(
     function () {
         return `O|￣|O-${this.getFirstChild().eval()}-O|￣|O`;
     }
