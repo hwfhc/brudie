@@ -12,7 +12,7 @@ const {
 
 const punc = new Token({
     MATCH: [
-        '##','\\*\\*','\\+','\\s','\\n'
+        '##','**','+','\s','\n'
     ],
     type: 'punc',
     isStrictEqual: true,

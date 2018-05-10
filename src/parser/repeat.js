@@ -10,10 +10,10 @@ class Repeat{
     }
 
     match(tokenStream){
-        var astArr = [];
+        let astArr = [];
 
         while(!tokenStream.isNull()){
-            var result = matchOnce(this.list,tokenStream);
+            let result = matchOnce(this.list,tokenStream);
 
             if (result)
                 insertAtLastOfArr(astArr, result);

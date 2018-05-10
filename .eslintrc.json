@@ -12,6 +12,9 @@
         "ecmaVersion": 8
     },
     "rules": {
+        "no-useless-escape": [
+            "error"
+        ],
         "indent": [
             "error",
             4

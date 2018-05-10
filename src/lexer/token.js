@@ -77,14 +77,17 @@ function getRegExp(exp) {
 
         let str = '^(';
         let index = arr.length;
+        let result = arr.map((item) => {
+            return escape(item);
+        });
 
         (function dispatch(i) {
             if (i >= index) return;
 
             if (i < index - 1)
-                str += `(${arr[i]})|`;
+                str += `(${result[i]})|`;
             else
-                str += `(${arr[i]})`;
+                str += `(${result[i]})`;
 
             dispatch(i + 1);
         })(0);
@@ -157,4 +160,27 @@ function formErrMessage(tokenStream) {
     at ${tokenStream.getLine()} : ${tokenStream.getLoc()}`;
 }
 
+function escape(item){
+    let str = '';
+    let char = '';
+
+    for (let i = 0; i < item.length; i++) {
+        if (item[i] === '\s')
+            char = '\\s';
+        else if (item[i] === '\n')
+            char = '\\n';
+        else if (item[i] === '\r')
+            char = '\\r';
+        else if (item[i] === '"')
+            char = '\\"';
+        else if (item[i] === '\'')
+            char = '\\\'';
+        else
+            char = `\\${item[i]}`;
+
+        str += char;
+    }
+
+    return str;
+}
 

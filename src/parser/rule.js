@@ -65,12 +65,12 @@ class Rule{
 }
 
 function matchGrammarRule(type, evalucation, list, tokenStream) {
-    var ast = new AST(type, evalucation);
+    let ast = new AST(type, evalucation);
 
-    for (var i = 0, len = list.length; i < len; i++) {
-        var item = list[i];
+    for (let i = 0, len = list.length; i < len; i++) {
+        let item = list[i];
 
-        var result = item.match(tokenStream);
+        let result = item.match(tokenStream);
 
         if (isError(result))
             return result;
