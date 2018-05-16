@@ -6,6 +6,9 @@ class Or{
          * the first branch has the biggest priority
          */
         this.branch = branch;
+
+        if (!branch || branch.length === 0)
+            throw new Error('arg of or can not be undefined');
     }
 
     match(tokenStream) {

@@ -7,6 +7,9 @@ class Maybe{
      */
     constructor(list){
         this.list = list;
+
+        if (!list || list.length === 0)
+            throw new Error('arg of maybe can not be undefined');
     }
 
     match(tokenStream){

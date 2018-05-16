@@ -7,6 +7,9 @@ class Repeat{
      */
     constructor(list){
         this.list = list;
+
+        if (!list || list.length === 0)
+            throw new Error('arg of repeat can not be undefined');
     }
 
     match(tokenStream){

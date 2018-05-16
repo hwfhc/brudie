@@ -13,7 +13,7 @@
     },
     "rules": {
         "no-useless-escape": [
-            "error"
+            "off"
         ],
         "indent": [
             "error",

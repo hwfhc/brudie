@@ -7,6 +7,9 @@ class All {
      */
     constructor(list) {
         this.list = list;
+
+        if (!list || list.length === 0)
+            throw new Error('arg of all can not be undefined');
     }
 
     match(tokenStream) {
